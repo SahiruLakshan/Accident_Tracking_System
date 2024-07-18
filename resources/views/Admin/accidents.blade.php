@@ -12,149 +12,112 @@
                         <div class="card-body">
                             <div class="table-responsive">
                                 <table class="table">
-                                    <thead class=" text-primary">
-                                        <th>
-                                            #
-                                        </th>
-                                        <th>
-                                            User ID
-                                        </th>
-                                        <th>
-                                            SE_No
-                                        </th>
-                                        <th>
-                                            Lat
-                                        </th>
-                                        <th>
-                                            Lon
-                                        </th>
-                                        <th>
-                                            Date
-                                        </th>
-                                        <th>
-                                            Time
-                                        </th>
-                                        <th>
-                                            Type
-                                        </th>
-                                        <th>
-                                            Severity
-                                        </th>
-                                        <th>
-                                            Vehicle 1
-                                        </th>
-                                        <th>
-                                            Vehicle 2
-                                        </th>
-                                        <th>
-                                            Vehicle 3
-                                        </th>
-                                        <th>
-                                            Pedest
-                                        </th>
-                                        <th>
-                                            Object
-                                        </th>
-                                        <th>
-                                            With_Con
-                                        </th>
-                                        <th>
-                                            Pas_Inj
-                                        </th>
-                                        <th>
-                                            Ped_Inj
-                                        </th>
-                                        <th>
-                                            des
-                                        </th>
-                                        <th>
-                                            drukness
-                                        </th>
-                                        <th>
-                                            dl
-                                        </th>
-                                        <th>
-                                            nic
-                                        </th>
-                                        <th>
-                                            remarks
-                                        </th>
-                                        <th>
-
-                                        </th>
-                                    </thead>
+                                  <thead class="text-primary">
+                                    <tr>
+                                      <th style="color: white;">#</th>
+                                      <th style="color: white;">User ID</th>
+                                      <th style="color: white;">SE_No</th>
+                                      <th style="color: white;">Lat & Lon</th>
+                                      <th style="color: white;">Date</th>
+                                      <th style="color: white;">Time</th>
+                                      <th style="color: white;">Type</th>
+                                      <th style="color: white;">Severity</th>
+                                      <th style="color: white;">Vehicle 1</th>
+                                      <th style="color: white;">Vehicle 2</th>
+                                      <th style="color: white;">Vehicle 3</th>
+                                      <th style="color: white;">Pedest</th>
+                                      <th style="color: white;">Object</th>
+                                      <th style="color: white;">With_Con</th>
+                                      <th style="color: white;">Pas_Inj</th>
+                                      <th style="color: white;">Ped_Inj</th>
+                                      <th style="color: white;">des</th>
+                                      <th style="color: white;">drukness</th>
+                                      <th style="color: white;">dl</th>
+                                      <th style="color: white;">nic</th>
+                                      <th style="color: white;">Images</th>
+                                      <th style="color: white;">remarks</th>
+                                      <th style="color: white;"></th>
+                                    </tr>
+                                  </thead>
+                                  
                                     <tbody>
+                                      @php $x =0 @endphp
+                                      @foreach ($data as $accidents)
+                                        @php $x++ @endphp
                                         <tr>
                                             <td>
-                                                1
+                                              {{ $x }}
                                             </td>
                                             <td>
-                                                123
+                                              {{ $accidents->user_id }}
                                             </td>
                                             <td>
-                                                AR_1
+                                              {{ $accidents->se_no }}
                                             </td>
                                             <td>
-                                                6.871309
+                                              <a href="https://www.google.com/maps/search/?api=1&query={{ $accidents->lat }},{{ $accidents->lon }}" target="_blank" style="color: inherit; text-decoration: underline;">
+                                                {{ $accidents->lat }},{{ $accidents->lon }}
+                                              </a>
                                             </td>
                                             <td>
-                                                79.885589
+                                              {{ $accidents->date }}
                                             </td>
                                             <td>
-                                                2005-01-22
+                                              {{ $accidents->time }}
                                             </td>
                                             <td>
-                                                13:40:00
+                                              {{ $accidents->acd_type }}
                                             </td>
                                             <td>
-                                                Veh To Veh
+                                              {{ $accidents->severity }}
                                             </td>
                                             <td>
-                                                Minor
+                                              {{ $accidents->vehicle_1 }}
                                             </td>
                                             <td>
-                                                Car
+                                              {{ $accidents->vehicle_2 }}
                                             </td>
                                             <td>
-                                                Car
+                                              {{ $accidents->vehicle_3 }}
                                             </td>
                                             <td>
-                                                Bus
+                                              {{ $accidents->pedest }}
                                             </td>
                                             <td>
-                                                -
+                                              {{ $accidents->object }}
                                             </td>
                                             <td>
-                                                -
+                                              {{ $accidents->with_con }}
                                             </td>
                                             <td>
-                                                N/A
+                                              {{ $accidents->pas_inj }}
                                             </td>
                                             <td>
-                                                1
+                                              {{ $accidents->ped_inj }}
                                             </td>
                                             <td>
-                                                0
+                                              {{ $accidents->des }}
                                             </td>
                                             <td>
-                                                Car collided with Police sergen
+                                              {{ $accidents->drunkness }}
                                             </td>
                                             <td>
-                                                Yes
+                                              {{ $accidents->dl }}
                                             </td>
                                             <td>
-                                                -
+                                              {{ $accidents->nic }}
                                             </td>
                                             <td>
-                                                -
+                                              <a href="" class="btn btn-sm btn-success">View Images</a>
                                             </td>
                                             <td>
-                                                -
+                                              {{ $accidents->remarks }}
                                             </td>
                                             <td>
                                                 <a href="" class="btn btn-sm btn-danger">Remove</a>
                                             </td>
                                         </tr>
+                                      @endforeach
                                     </tbody>
                                 </table>
                             </div>

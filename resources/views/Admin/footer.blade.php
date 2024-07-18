@@ -3,30 +3,15 @@
         <nav class="float-left">
             <ul>
                 <li>
-                    <a href="https://www.creative-tim.com">
-                        Creative Tim
-                    </a>
-                </li>
-                <li>
-                    <a href="https://creative-tim.com/presentation">
-                        About Us
-                    </a>
-                </li>
-                <li>
                     <a href="http://blog.creative-tim.com">
-                        Blog
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.creative-tim.com/license">
-                        Licenses
+                        About
                     </a>
                 </li>
             </ul>
         </nav>
         <div class="copyright float-right" id="date">
-            , made with <i class="material-icons">favorite</i> by
-            <a href="https://www.creative-tim.com" target="_blank">Creative Tim</a> for a better web.
+            , Designed & Developed by
+        <a href="https://www.crd.lk/" target="_blank">Centre for Defence Research & Development</a>
         </div>
     </div>
 </footer>

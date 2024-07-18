@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccidentController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -10,6 +11,4 @@ Route::get('/users', function () {
     return view('Admin.profile');
 });
 
-Route::get('/accidents', function () {
-    return view('Admin.accidents');
-});
+Route::get('/accidents',[AccidentController::class,'getdata']);
