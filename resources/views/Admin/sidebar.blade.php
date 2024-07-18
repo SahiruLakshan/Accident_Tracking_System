@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li class="nav-item" id="profile-link">
-                <a class="nav-link" href="/profile">
+                <a class="nav-link" href="/users">
                     <i class="material-icons">person</i>
                     <p>Registered Users</p>
                 </a>
@@ -62,18 +62,9 @@
         
         if (currentPath === '/') {
             document.getElementById('dashboard-link').classList.add('active');
-        } else if (currentPath === '/profile') {
+        } else if (currentPath === '/users') {
             document.getElementById('profile-link').classList.add('active');
-        } else if (currentPath === '/profile')) {
-            document.getElementById('table-link').classList.add('active');
-        } else if (currentPath.includes('typography.html')) {
-            document.getElementById('typography-link').classList.add('active');
-        } else if (currentPath.includes('icons.html')) {
-            document.getElementById('icons-link').classList.add('active');
-        } else if (currentPath.includes('map.html')) {
-            document.getElementById('maps-link').classList.add('active');
-        } else if (currentPath.includes('notifications.html')) {
-            document.getElementById('notifications-link').classList.add('active');
+        } 
         }
     });
 </script>

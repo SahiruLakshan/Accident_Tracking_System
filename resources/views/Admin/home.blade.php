@@ -126,49 +126,58 @@
       <div class="row">
         <div class="col-lg-6 col-md-12">
           <div class="card">
-            <div class="card-header card-header-primary">
+            <div class="card-header card-header-danger">
               <h4 class="card-title">Today Reports - Provinces</h4>
-              <p class="card-category">New employees on 15th September, 2016</p>
+              <p class="card-category">on 18th July, 2024</p>
             </div>
             <div class="card-body table-responsive">
               <table class="table table-hover">
                 <thead class="text-warning">
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Salary</th>
-                  <th>Country</th>
+                  <th>#</th>
+                  <th>Province</th>
+                  <th>Accident Count</th>
                 </thead>
                 <tbody>
                   <tr>
                     <td>1</td>
-                    <td>Dakota Rice</td>
-                    <td>$36,738</td>
-                    <td>Niger</td>
-                  </tr>
-                  <tr>
-                    <td>2</td>
-                    <td>Minerva Hooper</td>
-                    <td>$23,789</td>
-                    <td>Curaçao</td>
-                  </tr>
-                  <tr>
-                    <td>3</td>
-                    <td>Sage Rodriguez</td>
-                    <td>$56,142</td>
-                    <td>Netherlands</td>
-                  </tr>
-                  <tr>
-                    <td>4</td>
-                    <td>Philip Chaney</td>
-                    <td>$38,735</td>
-                    <td>Korea, South</td>
+                    <td>Southern Province</td>
+                    <td>5</td>
                   </tr>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
+
         <div class="col-lg-6 col-md-12">
+          <div class="card">
+            <div class="card-header card-header-warning">
+              <h4 class="card-title">Reports - Years</h4>
+              <p class="card-category">To 2023</p>
+            </div>
+            <div class="card-body table-responsive">
+              <table class="table table-hover">
+                <thead class="text-warning">
+                  <th>#</th>
+                  <th>Year</th>
+                  <th>Accident Count</th>
+                  <th>Deaths</th>
+                  <th>Injured</th>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>2023</td>
+                    <td>40</td>
+                    <td>5</td>
+                    <td>10</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        {{-- <div class="col-lg-6 col-md-12">
           <div class="card">
             <div class="card-header card-header-tabs card-header-warning">
               <div class="nav-tabs-navigation">
@@ -412,7 +421,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>

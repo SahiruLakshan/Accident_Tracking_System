@@ -6,7 +6,7 @@ Route::get('/', function () {
     return view('Admin.home');
 });
 
-Route::get('/profile', function () {
+Route::get('/users', function () {
     return view('Admin.profile');
 });
 
