@@ -1,4 +1,4 @@
-<div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/sidebar-2.jpg">
+<div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/accident.jpg">
     <div class="logo">
         <a href="http://www.creative-tim.com" class="simple-text logo-normal">
             Accident Tracker
@@ -13,7 +13,7 @@
             </li>
             <li class="nav-item" id="accidents-link">
                 <a class="nav-link" href="/accidents">
-                    <i class="material-icons">content_paste</i>
+                    <i class="material-icons">reports</i>
                     <p>Accidents Reports</p>
                 </a>
             </li>
@@ -23,10 +23,10 @@
                     <p>Registered Users</p>
                 </a>
             </li>
-            <li class="nav-item" id="typography-link">
-                <a class="nav-link" href="./typography.html">
-                    <i class="material-icons">library_books</i>
-                    <p>Typography</p>
+            <li class="nav-item" id="map-link">
+                <a class="nav-link" href="/map">
+                    <i class="material-icons">map</i>
+                    <p>Show on Map</p>
                 </a>
             </li>
             <li class="nav-item" id="icons-link">

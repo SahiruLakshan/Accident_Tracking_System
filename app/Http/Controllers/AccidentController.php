@@ -20,4 +20,8 @@ class AccidentController extends Controller
 
         return view('Admin.accidents', compact('data', 'selectedYear'));
     }
+
+    public function map(){
+        return view('Admin.map');
+    }
 }

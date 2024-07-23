@@ -11,5 +11,5 @@ Route::get('/users', function () {
     return view('Admin.profile');
 });
 
-Route::get('/accidents', [AccidentController::class,'getdata'])->name('admin.getdata');;
-
+Route::get('/accidents', [AccidentController::class,'getdata'])->name('admin.getdata');
+Route::get('/map', [AccidentController::class,'map'])->name('admin.map');
