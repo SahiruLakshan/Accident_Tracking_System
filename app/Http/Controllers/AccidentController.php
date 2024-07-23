@@ -9,11 +9,10 @@ class AccidentController extends Controller
 {
     public function getdata(Request $request)
     {
-        $selectedYear = $request->input('year', date('Y')); // Default to the current year if no year is selected
+        $selectedYear = $request->input('year', date('Y')); 
 
-        $data = Data::whereYear('date', $selectedYear)->get(); // Assuming 'date' is the name of your date column
+        $data = Data::whereYear('date', $selectedYear)->get();
 
-        // Return JSON response for AJAX requests
         if ($request->ajax()) {
             return response()->json(['data' => $data]);
         }
@@ -21,7 +20,10 @@ class AccidentController extends Controller
         return view('Admin.accidents', compact('data', 'selectedYear'));
     }
 
-    public function map(){
-        return view('Admin.map');
+    public function map()
+    {
+        $locations = Data::all(); 
+        
+        return view('Admin.map', ['locations' => $locations]);
     }
 }
