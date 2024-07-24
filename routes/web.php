@@ -3,9 +3,8 @@
 use App\Http\Controllers\AccidentController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('Admin.home');
-});
+
+Route::get('/', [AccidentController::class,'home'])->name('admin.home');
 
 Route::get('/users', function () {
     return view('Admin.profile');

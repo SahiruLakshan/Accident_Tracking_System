@@ -7,9 +7,10 @@
         <div class="col-xl-4 col-lg-12">
           <div class="card card-chart">
             <div class="card-header card-header-success">
-              <div class="ct-chart" id="dailySalesChart"></div>
+              <div class="ct-chart" id="completedTasksChart"></div>
             </div>
             <div class="card-body">
+              
               <h4 class="card-title">This Week - 2nd week of July</h4>
               <p class="card-category">
                 <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase compare yesterday.</p>
@@ -426,3 +427,109 @@
     </div>
   </div>
 @endsection
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var monthlyCounts = @json($monthlyCounts);
+
+      var monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+
+      var dataWebsiteViewsChart = {
+          labels: monthLabels,
+          series: [
+              Object.values(monthlyCounts)
+          ]
+      };
+
+      var optionsWebsiteViewsChart = {
+          axisX: {
+              showGrid: false
+          },
+          low: 0,
+          high: Math.max(...Object.values(monthlyCounts)) + 10, 
+          chartPadding: {
+              top: 0,
+              right: 5,
+              bottom: 0,
+              left: 0
+          }
+      };
+
+      var responsiveOptions = [
+          ['screen and (max-width: 640px)', {
+              seriesBarDistance: 5,
+              axisX: {
+                  labelInterpolationFnc: function(value) {
+                      return value[0];
+                  }
+              }
+          }]
+      ];
+
+      var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+
+      md.startAnimationForBarChart(websiteViewsChart);
+
+      websiteViewsChart.on('draw', function(data) {
+          if (data.type === 'bar') {
+              data.group.append(
+                  new Chartist.Svg('text', {
+                      x: data.x2,
+                      y: data.y2 - 10,
+                      style: 'text-anchor: middle; font-size: 12px;fill: white;',
+                  }, 'ct-label').text(data.value.y)
+              );
+          }
+      });
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Get weekly data from Blade
+      var weeklyCounts = @json(array_values($weeklyCounts));
+
+      // Define labels for the days of the week
+      var weekLabels = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      // Prepare data for Chartist
+      var dataCompletedTasksChart = {
+          labels: weekLabels,
+          series: [
+              weeklyCounts
+          ]
+      };
+
+      var optionsCompletedTasksChart = {
+          lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+          }),
+          low: 0,
+          high: Math.max(...weeklyCounts) + 10, // Set high dynamically based on data
+          chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+          }
+      };
+
+      var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
+
+      // Start animation for the Completed Tasks Chart - Line Chart
+      md.startAnimationForLineChart(completedTasksChart);
+
+      // Add text labels to the line chart points
+      completedTasksChart.on('draw', function(data) {
+          if (data.type === 'point') {
+              data.group.append(
+                  new Chartist.Svg('text', {
+                      x: data.x,
+                      y: data.y - 10,
+                      style: 'text-anchor: middle; font-size: 12px; fill: white;',
+                  }, 'ct-label').text(data.value.y)
+              );
+          }
+      });
+  });
+</script>
