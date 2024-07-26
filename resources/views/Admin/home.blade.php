@@ -10,14 +10,14 @@
               <div class="ct-chart" id="completedTasksChart"></div>
             </div>
             <div class="card-body">
-              
-              <h4 class="card-title">This Week - 2nd week of July</h4>
+              <h4 class="card-title">Accidents of This Week - Week {{ $weekOfMonth }} of {{ \Carbon\Carbon::now()->format('F') }}</h4>
+
               <p class="card-category">
-                <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase compare yesterday.</p>
+                <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> <span style="color: rgb(187, 180, 180)">increase compare yesterday.</span> </p>
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">access_time</i> updated 4 minutes ago
+                <i class="material-icons">access_time</i> Last updated: {{ $formattedUpdatedAt }}
               </div>
             </div>
           </div>
@@ -28,12 +28,20 @@
               <div class="ct-chart" id="websiteViewsChart"></div>
             </div>
             <div class="card-body">
-              <h4 class="card-title">This Year - 2024</h4>
-              <p class="card-category"><span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> increase compare last year.</p></p>
+              <h4 class="card-title">Accidents of This Year - {{ \Carbon\Carbon::now()->format('Y') }}</h4>
+              @if($percentageChange>0)
+                <p class="card-category">
+                  <span class="text-danger"><i class="fa fa-long-arrow-up"></i> {{ number_format($percentageChange, 2) }}% </span> <span style="color: rgb(187, 180, 180)">increase compare last year.</span>.
+                </p>
+              @else
+                <p class="card-category">
+                  <span class="text-success"><i class="fa fa-long-arrow-down"></i> {{ number_format($percentageChange, 2) }}% </span> <span style="color: rgb(187, 180, 180)">decrease compare last year.</span>.
+                </p>
+              @endif
             </div>
             <div class="card-footer">
               <div class="stats">
-                <i class="material-icons">access_time</i> campaign sent 2 days ago
+                <i class="material-icons">access_time</i> Last updated: {{ $formattedUpdatedAt }}
               </div>
             </div>
           </div>
@@ -41,16 +49,10 @@
         <div class="col-xl-4 col-lg-12">
           <div class="card card-chart">
             <div class="card-header card-header-danger">
-              <div class="ct-chart" id="completedTasksChart"></div>
+              <div class="ct-chart" id="lastyear"></div>
             </div>
             <div class="card-body">
-              <h4 class="card-title">Completed Tasks</h4>
-              <p class="card-category">Last Campaign Performance</p>
-            </div>
-            <div class="card-footer">
-              <div class="stats">
-                <i class="material-icons">access_time</i> campaign sent 2 days ago
-              </div>
+              <h4 class="card-title">Accidents of Last 5 Years</h4>
             </div>
           </div>
         </div>
@@ -430,7 +432,7 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-      var monthlyCounts = @json($monthlyCounts);
+      var monthlyCounts = @json($monthlyCountsCurrentYear);
 
       var monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
 
@@ -533,3 +535,60 @@
       });
   });
 </script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      var yearlyCounts = @json($yearlyCounts);
+  
+      var yearLabels = Object.keys(yearlyCounts);
+      var seriesData = Object.values(yearlyCounts);
+  
+      var dataWebsiteViewsChart = {
+          labels: yearLabels,
+          series: [seriesData]
+      };
+  
+      var optionsWebsiteViewsChart = {
+          axisX: {
+              showGrid: false
+          },
+          low: 0,
+          high: Math.max(...seriesData) + 10,
+          chartPadding: {
+              top: 0,
+              right: 5,
+              bottom: 0,
+              left: 0
+          }
+      };
+  
+      var responsiveOptions = [
+          ['screen and (max-width: 640px)', {
+              seriesBarDistance: 5,
+              axisX: {
+                  labelInterpolationFnc: function(value) {
+                      return value;
+                  }
+              }
+          }]
+      ];
+  
+      var websiteViewsChart = new Chartist.Bar('#lastyear', dataWebsiteViewsChart, optionsWebsiteViewsChart, responsiveOptions);
+  
+      md.startAnimationForBarChart(websiteViewsChart);
+  
+      websiteViewsChart.on('draw', function(data) {
+          if (data.type === 'bar') {
+              data.group.append(
+                  new Chartist.Svg('text', {
+                      x: data.x2,
+                      y: data.y2 - 10,
+                      style: 'text-anchor: middle; font-size: 12px;fill: white;',
+                  }, 'ct-label').text(data.value.y)
+              );
+          }
+      });
+  });
+  </script>
+  
