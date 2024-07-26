@@ -131,7 +131,11 @@ class AccidentController extends Controller
             'weekOfMonth' => $weekOfMonth,
             'yearlyCounts' => $yearlyCounts,
             'percentageChangeTodayYesterday' => $percentageChangeTodayYesterday,
-            'timeRangeCounts' => $timeRangeCounts, // Pass to view
+            'timeRangeCounts' => $timeRangeCounts,
         ]);
+    }
+
+    public function info(){
+        return view('Admin.info');
     }
 }

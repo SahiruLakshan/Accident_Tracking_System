@@ -37,16 +37,21 @@
 <body class="dark-edition">
 
   <div class="wrapper">
+    
     @include('Admin.sidebar')
+
     <div class="main-panel">
+
       @include('Admin.navbar')
         @yield('content')
       @include('Admin.footer')
+
       <script>
         const x = new Date().getFullYear();
         let date = document.getElementById('date');
         date.innerHTML = '&copy; ' + x + date.innerHTML;
       </script>
+
     </div>
   </div>    
       

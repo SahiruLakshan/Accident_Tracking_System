@@ -12,6 +12,12 @@
                     <p>Dashboard</p>
                 </a>
             </li>
+            <li class="nav-item" id="info-link">
+                <a class="nav-link" href="/info">
+                    <i class="material-icons">local_pharmacy</i>
+                    <p>Injured / Death Details</p>
+                </a>
+            </li>
             <li class="nav-item" id="accidents-link">
                 <a class="nav-link" href="/accidents">
                     <i class="material-icons">report</i>
@@ -50,7 +56,9 @@
             // Set the 'active' class based on the current path
             if (currentPath === '/') {
                 document.getElementById('dashboard-link').classList.add('active');
-            } else if (currentPath === '/accidents') {
+            } else if (currentPath === '/info') {
+                document.getElementById('info-link').classList.add('active');
+            }else if (currentPath === '/accidents') {
                 document.getElementById('accidents-link').classList.add('active');
             } else if (currentPath === '/users') {
                 document.getElementById('profile-link').classList.add('active');

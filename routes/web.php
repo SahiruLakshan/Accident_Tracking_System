@@ -12,3 +12,4 @@ Route::get('/users', function () {
 
 Route::get('/accidents', [AccidentController::class,'getdata'])->name('admin.getdata');
 Route::get('/map', [AccidentController::class,'map'])->name('admin.map');
+Route::get('/info', [AccidentController::class,'info'])->name('admin.info');
