@@ -40,7 +40,9 @@ class AccidentController extends Controller
             // Fetch total accident count for each year
             $yearlyCounts[$year] = Data::whereYear('date', $year)->count();
         }
+
         $weekOfMonth = ceil($currentDate->day / 7);
+
         // Monthly accident counts for the current year
         $monthlyAccidentCountsCurrentYear = Data::selectRaw('MONTH(date) as month, COUNT(*) as count')
             ->whereYear('date', $currentYear)
@@ -71,7 +73,7 @@ class AccidentController extends Controller
         $totalCurrentYear = array_sum($monthlyCountsCurrentYear);
         $totalLastYear = array_sum($monthlyCountsLastYear);
 
-        // Calculate percentage change
+        // Calculate percentage change for the current year
         $percentageChange = $totalLastYear > 0 ? (($totalCurrentYear - $totalLastYear) / $totalLastYear) * 100 : 0;
 
         // Get the last updated timestamp
@@ -79,7 +81,6 @@ class AccidentController extends Controller
         $updatedAt = $lastUpdated ? $lastUpdated->updated_at : Carbon::now();
         $formattedUpdatedAt = Carbon::parse($updatedAt)->format('F j, Y h:i A'); // Format: January 1, 2024 12:00 PM
         $timeSinceUpdate = Carbon::parse($updatedAt)->diffForHumans();
-
 
         // Weekly accident counts for the current week
         $startOfWeek = Carbon::now()->startOfWeek();
@@ -97,6 +98,29 @@ class AccidentController extends Controller
             $weeklyCounts[$day] = $count;
         }
 
+        // Calculate today's and yesterday's accident counts
+        $todayCount = Data::whereDate('date', $currentDate)->count();
+        $yesterdayCount = Data::whereDate('date', $currentDate->copy()->subDay())->count();
+
+        // Calculate percentage change from yesterday to today
+        $percentageChangeTodayYesterday = $yesterdayCount > 0 ? (($todayCount - $yesterdayCount) / $yesterdayCount) * 100 : 0;
+
+        // Accident counts for specified time ranges this year
+        $timeRanges = [
+            '00:00 - 06:00' => ['00:00:00', '05:59:59'],
+            '06:00 - 12:00' => ['06:00:00', '11:59:59'],
+            '12:00 - 18:00' => ['12:00:00', '17:59:59'],
+            '18:00 - 00:00' => ['18:00:00', '23:59:59'],
+        ];
+
+        $timeRangeCounts = [];
+        foreach ($timeRanges as $label => $range) {
+            $timeRangeCounts[$label] = Data::whereYear('date', $currentYear)
+                ->whereTime('time', '>=', $range[0])
+                ->whereTime('time', '<=', $range[1])
+                ->count();
+        }
+
         return view('Admin.home', [
             'monthlyCountsCurrentYear' => $monthlyCountsCurrentYear,
             'totalCurrentYear' => $totalCurrentYear,
@@ -106,6 +130,8 @@ class AccidentController extends Controller
             'weeklyCounts' => $weeklyCounts,
             'weekOfMonth' => $weekOfMonth,
             'yearlyCounts' => $yearlyCounts,
+            'percentageChangeTodayYesterday' => $percentageChangeTodayYesterday,
+            'timeRangeCounts' => $timeRangeCounts, // Pass to view
         ]);
     }
 }

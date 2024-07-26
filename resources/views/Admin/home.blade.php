@@ -4,7 +4,7 @@
 <div class="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="col-xl-4 col-lg-12">
+        <div class="col-xl-6 col-lg-12">
           <div class="card card-chart">
             <div class="card-header card-header-success">
               <div class="ct-chart" id="completedTasksChart"></div>
@@ -12,8 +12,25 @@
             <div class="card-body">
               <h4 class="card-title">Accidents of This Week - Week {{ $weekOfMonth }} of {{ \Carbon\Carbon::now()->format('F') }}</h4>
 
-              <p class="card-category">
-                <span class="text-success"><i class="fa fa-long-arrow-up"></i> 55% </span> <span style="color: rgb(187, 180, 180)">increase compare yesterday.</span> </p>
+              @if($percentageChangeTodayYesterday>0)
+                <p class="card-category">
+                  <span style="color: rgb(187, 180, 180)">Today</span>
+                  <span class="text-danger">
+                      <i class="fa fa-long-arrow-up"></i>
+                      {{ number_format($percentageChangeTodayYesterday, 2) }}%
+                  </span>
+                  <span style="color: rgb(187, 180, 180)">increase compared to yesterday.</span>
+                </p>
+              @else
+                <p class="card-category">
+                  <span class="text-success">
+                    <span style="color: rgb(187, 180, 180)">Today</span>
+                      <i class="fa fa-long-arrow-down"></i>
+                      {{ number_format($percentageChangeTodayYesterday, 2) }}%
+                  </span>
+                  <span style="color: rgb(187, 180, 180)">decrease compared to yesterday.</span>
+                </p>
+              @endif
             </div>
             <div class="card-footer">
               <div class="stats">
@@ -22,7 +39,7 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-4 col-lg-12">
+        <div class="col-xl-6 col-lg-12">
           <div class="card card-chart">
             <div class="card-header card-header-warning">
               <div class="ct-chart" id="websiteViewsChart"></div>
@@ -46,13 +63,23 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-4 col-lg-12">
+        <div class="col-xl-6 col-lg-12">
           <div class="card card-chart">
             <div class="card-header card-header-danger">
               <div class="ct-chart" id="lastyear"></div>
             </div>
             <div class="card-body">
               <h4 class="card-title">Accidents of Last 5 Years</h4>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-6 col-lg-12">
+          <div class="card card-chart">
+            <div class="card-header card-header-primary">
+              <div class="ct-chart" id="timerange"></div>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Accidents Time Ranges</h4>
             </div>
           </div>
         </div>
@@ -434,7 +461,7 @@
   document.addEventListener('DOMContentLoaded', function () {
       var monthlyCounts = @json($monthlyCountsCurrentYear);
 
-      var monthLabels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+      var monthLabels = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
       var dataWebsiteViewsChart = {
           labels: monthLabels,
@@ -536,7 +563,6 @@
   });
 </script>
 
-
 <script>
   document.addEventListener('DOMContentLoaded', function () {
       var yearlyCounts = @json($yearlyCounts);
@@ -590,5 +616,54 @@
           }
       });
   });
-  </script>
-  
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Get time range data from Blade
+      var timeRangeCounts = @json(array_values($timeRangeCounts));
+
+      // Define labels for the time ranges
+      var timeRangeLabels = ['00:00 - 05:59 am', '06:00 - 11:59 am', '12:00 - 17:59 pm', '18:00 - 23:59 pm'];
+
+      // Prepare data for Chartist
+      var dataTimeRangeChart = {
+          labels: timeRangeLabels,
+          series: [
+              timeRangeCounts
+          ]
+      };
+
+      var optionsTimeRangeChart = {
+          lineSmooth: Chartist.Interpolation.cardinal({
+              tension: 0
+          }),
+          low: 0,
+          high: Math.max(...timeRangeCounts) + 10, // Set high dynamically based on data
+          chartPadding: {
+              top: 0,
+              right: 0,
+              bottom: 0,
+              left: 0
+          }
+      };
+
+      var timeRangeChart = new Chartist.Line('#timerange', dataTimeRangeChart, optionsTimeRangeChart);
+
+      // Start animation for the Time Range Chart - Line Chart
+      md.startAnimationForLineChart(timeRangeChart);
+
+      // Add text labels to the line chart points
+      timeRangeChart.on('draw', function(data) {
+          if (data.type === 'point') {
+              data.group.append(
+                  new Chartist.Svg('text', {
+                      x: data.x,
+                      y: data.y - 10,
+                      style: 'text-anchor: middle; font-size: 12px; fill: white;',
+                  }, 'ct-label').text(data.value.y)
+              );
+          }
+      });
+  });
+</script>
