@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Data;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AccidentController extends Controller
 {
@@ -12,7 +13,7 @@ class AccidentController extends Controller
     {
         $selectedYear = $request->input('year', date('Y'));
 
-        $data = Data::whereYear('date', $selectedYear)->get();
+        $data = Data::whereYear('date', $selectedYear)->orderBy('date', 'desc')->get();
 
         if ($request->ajax()) {
             return response()->json(['data' => $data]);
@@ -135,7 +136,25 @@ class AccidentController extends Controller
         ]);
     }
 
-    public function info(){
-        return view('Admin.info');
+    public function info()
+    {
+        $severityCounts = Data::select('Severity', DB::raw('count(*) as count'))
+            ->whereYear('date', date('Y'))
+            ->groupBy('Severity')
+            ->get();
+
+        $yearlyData = DB::table('data')
+            ->select(
+                DB::raw('YEAR(date) as year'),
+                DB::raw('count(*) as accident_count'),
+                DB::raw('sum(pas_inj + ped_inj) as total_injuries')
+            )
+            ->whereYear('date', '>=', Carbon::now()->subYears(5)->year) // Get data starting from 5 years ago
+            ->whereYear('date', '<=', date('Y') - 1) // Get data up to the last year
+            ->groupBy(DB::raw('YEAR(date)'))
+            ->orderBy('year', 'desc') // Order by year in descending order
+            ->get();
+
+        return view('Admin.info', compact('severityCounts', 'yearlyData'));
     }
 }

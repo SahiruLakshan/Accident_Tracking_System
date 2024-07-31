@@ -130,64 +130,36 @@
                                                 <td>
                                                     {{ $accidents->severity }}
                                                 </td>
-                                                {{-- <td>
-                                                    {{ $accidents->vehicle_1 }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->vehicle_2 }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->vehicle_3 }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->pedest }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->object }}
-                                                </td> --}}
                                                 <td>
                                                     <button type="button" class="btn btn-sm btn-success"
                                                         data-toggle="modal" data-target="#projectDetailsModal"
-                                                        data-description="{{ $accidents->des }}"
-                                                        onclick="setDescription('{{ $accidents->user_id }}','{{ $accidents->se_no }}','{{ $accidents->lat }}'
-                                                        ,'{{ $accidents->lon }}','{{ $accidents->date }}','{{ $accidents->time }}','{{ $accidents->acd_type }}'
-                                                        ,'{{ $accidents->severity }}','{{ $accidents->vehicle_1 }}','{{ $accidents->vehicle_2 }}','{{ $accidents->vehicle_3 }}'
-                                                        ,'{{ $accidents->pedest }}','{{ $accidents->object }}','{{ $accidents->with_con }}','{{ $accidents->pas_inj }}'
-                                                        ,'{{ $accidents->ped_inj }}','{{ $accidents->des }}','{{ $accidents->drunkness }}','{{ $accidents->dl }}'
-                                                        ,'{{ $accidents->nic }}','{{ $accidents->remarks }}')">See
+                                                        onclick="setDescription(
+                                                            '{{ $accidents->user_id }}', 
+                                                            '{{ $accidents->se_no }}', 
+                                                            '{{ $accidents->lat }}', 
+                                                            '{{ $accidents->lon }}', 
+                                                            '{{ $accidents->date }}', 
+                                                            '{{ $accidents->time }}', 
+                                                            '{{ $accidents->acd_type }}', 
+                                                            '{{ $accidents->severity }}', 
+                                                            '{{ $accidents->vehicle_1 }}', 
+                                                            '{{ $accidents->vehicle_2 }}', 
+                                                            '{{ $accidents->vehicle_3 }}', 
+                                                            '{{ $accidents->pedest }}', 
+                                                            '{{ $accidents->object }}', 
+                                                            '{{ $accidents->with_con }}', 
+                                                            '{{ $accidents->pas_inj }}', 
+                                                            '{{ $accidents->ped_inj }}', 
+                                                            '{{ $accidents->des }}', 
+                                                            '{{ $accidents->drunkness }}', 
+                                                            '{{ $accidents->dl }}', 
+                                                            '{{ $accidents->nic }}', 
+                                                            '{{ $accidents->remarks }}'
+                                                        )">See
                                                         More</button>
                                                     <a href="" class="btn btn-sm btn-danger">Remove</a>
                                                 </td>
-                                                {{-- <td>
-                                                    {{ $accidents->with_con }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->pas_inj }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->ped_inj }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->des }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->drunkness }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->dl }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->nic }}
-                                                </td>
-                                                <td>
-                                                    <a href="" class="btn btn-sm btn-success">View Images</a>
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->remarks }}
-                                                </td>
-                                                <td>
-                                                    <a href="" class="btn btn-sm btn-danger">Remove</a>
-                                                </td> --}}
+
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -203,10 +175,11 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog" aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
+<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog"
+    aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 1140px">
         <div class="modal-content">
-            <div class="modal-header" style="background-color: #003e64; color: white;">
+            <div class="modal-header" style="background-color: #000000; color: white;">
                 <h5 class="modal-title">Accident Details - Serial No : <span id="modalSeNo"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color:white">
                     <span aria-hidden="true">&times;</span>
@@ -304,30 +277,31 @@
 </div>
 
 
+
 <script>
-    function setDescription(userId, seNo, lat, lon, date, time, type, severity, vehicle1, vehicle2, vehicle3, pedest, object, withCon, pasInj, pedInj, des, drunkness, dl, nic, remarks) {
-        // Set modal fields
-        $('#modalUserId').text(userId);
-        $('#modalSeNo').text(seNo);
-        $('#modalLat').text(lat);
-        $('#modalLon').text(lon);
-        $('#modalDate').text(date);
-        $('#modalTime').text(time);
-        $('#modalType').text(type);
-        $('#modalSeverity').text(severity);
-        $('#modalVehicle1').text(vehicle1);
-        $('#modalVehicle2').text(vehicle2);
-        $('#modalVehicle3').text(vehicle3);
-        $('#modalPedest').text(pedest);
-        $('#modalObject').text(object);
-        $('#modalWithCon').text(withCon);
-        $('#modalPasInj').text(pasInj);
-        $('#modalPedInj').text(pedInj);
-        $('#modalDes').text(des);
-        $('#modalDrunkness').text(drunkness);
-        $('#modalDl').text(dl);
-        $('#modalNic').text(nic);
-        $('#modalRemarks').text(remarks);
+    function setDescription(userId, seNo, lat, lon, date, time, acdType, severity, vehicle1, vehicle2, vehicle3, pedest,
+        object, withCon, pasInj, pedInj, des, drunkness, dl, nic, remarks) {
+        document.getElementById('modalUserId').innerText = userId;
+        document.getElementById('modalSeNo').innerText = seNo;
+        document.getElementById('modalLat').innerText = lat;
+        document.getElementById('modalLon').innerText = lon;
+        document.getElementById('modalDate').innerText = date;
+        document.getElementById('modalTime').innerText = time;
+        document.getElementById('modalType').innerText = acdType;
+        document.getElementById('modalSeverity').innerText = severity;
+        document.getElementById('modalVehicle1').innerText = vehicle1;
+        document.getElementById('modalVehicle2').innerText = vehicle2;
+        document.getElementById('modalVehicle3').innerText = vehicle3;
+        document.getElementById('modalPedest').innerText = pedest;
+        document.getElementById('modalObject').innerText = object;
+        document.getElementById('modalWithCon').innerText = withCon;
+        document.getElementById('modalPasInj').innerText = pasInj;
+        document.getElementById('modalPedInj').innerText = pedInj;
+        document.getElementById('modalDes').innerText = des;
+        document.getElementById('modalDrunkness').innerText = drunkness;
+        document.getElementById('modalDl').innerText = dl;
+        document.getElementById('modalNic').innerText = nic;
+        document.getElementById('modalRemarks').innerText = remarks;
     }
 </script>
 

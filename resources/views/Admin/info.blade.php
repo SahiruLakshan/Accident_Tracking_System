@@ -3,53 +3,56 @@
     <div class="content">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-5 col-md-12">
                     <div class="card">
                         <div class="card-header card-header-danger">
-                            <h4 class="card-title">This Month Status - {{ \Carbon\Carbon::now()->format('M') }}</h4>
+                            <h4 class="card-title">This Year Status - {{ \Carbon\Carbon::now()->format('Y') }}</h4>
                         </div>
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
                                 <thead class="text-warning">
-                                    <th>#</th>
-                                    <th>Province</th>
-                                    <th>Accident Count</th>
+                                    <th><b>#</b></th>
+                                    <th><b>Severity</b></th>
+                                    <th><b>Accident Count</b></th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>Southern Province</td>
-                                        <td>5</td>
-                                    </tr>
+                                    @php $x = 0 @endphp
+                                    @foreach ($severityCounts as $severity)
+                                        @php $x++@endphp
+                                        <tr>
+                                            <td>{{ $x }}</td>
+                                            <td>{{ $severity->Severity }}</td>
+                                            <td>{{ $severity->count }}</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-md-12">
+                <div class="col-lg-7 col-md-12">
                     <div class="card">
                         <div class="card-header card-header-warning">
-                            <h4 class="card-title">Reports - Years</h4>
-                            <p class="card-category">To 2023</p>
+                            <h4 class="card-title">Last Years Status</h4>
                         </div>
                         <div class="card-body table-responsive">
                             <table class="table table-hover">
                                 <thead class="text-warning">
-                                    <th>#</th>
-                                    <th>Year</th>
-                                    <th>Accident Count</th>
-                                    <th>Deaths</th>
-                                    <th>Injured</th>
+                                    <th><b>#</b></th>
+                                    <th><b>Year</b></th>
+                                    <th><b>Accident Count</b></th>
+                                    <th><b>Injuries</b></th>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2023</td>
-                                        <td>40</td>
-                                        <td>5</td>
-                                        <td>10</td>
-                                    </tr>
+                                    @foreach ($yearlyData as $index => $data)
+                                        <tr>
+                                            <td>{{ $index + 1 }}</td>
+                                            <td>{{ $data->year }}</td>
+                                            <td>{{ $data->accident_count }}</td>
+                                            <td>{{ $data->total_injuries }}</td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

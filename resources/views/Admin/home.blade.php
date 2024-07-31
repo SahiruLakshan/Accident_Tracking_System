@@ -628,13 +628,10 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Get time range data from Blade
         var timeRangeCounts = @json(array_values($timeRangeCounts));
 
-        // Define labels for the time ranges
         var timeRangeLabels = ['00:00 - 05:59 am', '06:00 - 11:59 am', '12:00 - 17:59 pm', '18:00 - 23:59 pm'];
 
-        // Prepare data for Chartist
         var dataTimeRangeChart = {
             labels: timeRangeLabels,
             series: [
@@ -647,7 +644,7 @@
                 tension: 0
             }),
             low: 0,
-            high: Math.max(...timeRangeCounts) + 10, // Set high dynamically based on data
+            high: Math.max(...timeRangeCounts) + 10, 
             chartPadding: {
                 top: 0,
                 right: 0,
@@ -658,10 +655,8 @@
 
         var timeRangeChart = new Chartist.Line('#timerange', dataTimeRangeChart, optionsTimeRangeChart);
 
-        // Start animation for the Time Range Chart - Line Chart
         md.startAnimationForLineChart(timeRangeChart);
 
-        // Add text labels to the line chart points
         timeRangeChart.on('draw', function(data) {
             if (data.type === 'point') {
                 data.group.append(
