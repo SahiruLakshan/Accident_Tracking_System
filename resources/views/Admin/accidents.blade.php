@@ -159,7 +159,6 @@
                                                         More</button>
                                                     <a href="" class="btn btn-sm btn-danger">Remove</a>
                                                 </td>
-
                                             </tr>
                                         @endforeach
                                     </tbody>
