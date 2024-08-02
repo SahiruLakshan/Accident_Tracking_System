@@ -1,7 +1,13 @@
 <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute fixed-top" id="navigation-example">
     <div class="container-fluid">
         <div class="navbar-wrapper">
-            <a class="navbar-brand" href="javascript:void(0)">Dashboard</a>
+            @if (Auth::check() && Auth::user()->type == '0')
+                <a class="navbar-brand" href="javascript:void(0)">{{ Auth::user()->name }}</a>
+            @else
+                <a class="navbar-brand" href="javascript:void(0)">Admin - {{ Auth::user()->name }}</a>
+                <a href="" class="btn btn-sm btn-danger"><i class="material-icons">add</i> Add an
+                    user</a>
+            @endif
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
             aria-expanded="false" aria-label="Toggle navigation" data-target="#navigation-example">
@@ -41,12 +47,6 @@
                         <a class="dropdown-item" href="javascript:void(0)">Another Notification</a>
                         <a class="dropdown-item" href="javascript:void(0)">Another One</a>
                     </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0)">
-                        <i class="material-icons">person</i>
-                        <p class="d-lg-none d-md-block">Account</p>
-                    </a>
                 </li>
             </ul>
         </div>
