@@ -2,11 +2,12 @@
     <div class="container-fluid">
         <div class="navbar-wrapper">
             @if (Auth::check() && Auth::user()->type == '0')
-                <a class="navbar-brand" href="javascript:void(0)">{{ Auth::user()->name }}</a>
-            @else
+                <a class="navbar-brand" href="javascript:void(0)"><i class="material-icons">person</i> {{ Auth::user()->name }}</a>
+            @elseif (Auth::check() && Auth::user()->type == '1')
                 <a class="navbar-brand" href="javascript:void(0)">Admin - {{ Auth::user()->name }}</a>
-                <a href="" class="btn btn-sm btn-danger"><i class="material-icons">add</i> Add an
-                    user</a>
+                <a href="/register" class="btn btn-sm btn-danger">Add an user</a>
+            @else
+                <p>Please login</p>
             @endif
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" aria-controls="navigation-index"
@@ -17,7 +18,7 @@
             <span class="navbar-toggler-icon icon-bar"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end">
-            <form class="navbar-form">
+            <form class="navbar-form mr-5">
                 <div class="input-group no-border">
                     <input type="text" value="" class="form-control" placeholder="Search..." />
                     <button type="submit" class="btn btn-default btn-round btn-just-icon">
@@ -27,13 +28,17 @@
                 </div>
             </form>
             <ul class="navbar-nav">
-                <li class="nav-item">
+                <form action="/logout" method="post">
+                    @csrf
+                    <button class="btn btn-sm btn-success">Logout</button>
+                </form>
+                {{-- <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0)">
                         <i class="material-icons">dashboard</i>
                         <p class="d-lg-none d-md-block">Stats</p>
                     </a>
-                </li>
-                <li class="nav-item dropdown">
+                </li> --}}
+                {{-- <li class="nav-item dropdown">
                     <a class="nav-link" href="javscript:void(0)" id="navbarDropdownMenuLink" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                         <i class="material-icons">notifications</i>
@@ -47,7 +52,7 @@
                         <a class="dropdown-item" href="javascript:void(0)">Another Notification</a>
                         <a class="dropdown-item" href="javascript:void(0)">Another One</a>
                     </div>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Data;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -157,4 +158,10 @@ class AccidentController extends Controller
 
         return view('Admin.info', compact('severityCounts', 'yearlyData'));
     }
+
+    public function user(){
+        $user = User::all();
+        return view('Admin.user');
+    }
+
 }
