@@ -8,9 +8,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
 
 class ProfileController extends Controller
 {
+
+    public function user(){
+        $users = User::all();
+        return view('Admin.profile',compact('users'));
+    }
+    
     /**
      * Display the user's profile form.
      */
@@ -56,5 +63,11 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return Redirect::to('/');
+    }
+
+    public function remove($id){
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->back()->with('success', 'User Deleted.');
     }
 }

@@ -159,9 +159,6 @@ class AccidentController extends Controller
         return view('Admin.info', compact('severityCounts', 'yearlyData'));
     }
 
-    public function user(){
-        $user = User::all();
-        return view('Admin.user');
-    }
+    
 
 }

@@ -24,12 +24,14 @@
                     <p>Accidents Reports</p>
                 </a>
             </li>
-            <li class="nav-item" id="profile-link">
-                <a class="nav-link" href="/users">
-                    <i class="material-icons">person</i>
-                    <p>Registered Users</p>
-                </a>
-            </li>
+            @if (Auth::user()->type == '1')
+                <li class="nav-item" id="profile-link">
+                    <a class="nav-link" href="/users">
+                        <i class="material-icons">person</i>
+                        <p>Registered Users</p>
+                    </a>
+                </li>
+            @endif
             <li class="nav-item" id="map-link">
                 <a class="nav-link" href="/map">
                     <i class="material-icons">map</i>

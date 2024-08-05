@@ -36,15 +36,23 @@
                                         </th>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td>123</td>
-                                            <td>Sahiru Lakshan</td>
-                                            <td>0766216791</td>
-                                            <td>Mahawela Gedara, Kotawila, Kamburugamuwa</td>
-                                            <td>sahiru906@gmail.com</td>
-                                            <td><a href="" class="btn btn-sm btn-danger">Remove</a></td>
-                                        </tr>
+                                        @php
+                                            $x=0;
+                                        @endphp
+                                        @foreach($users as $user)
+                                            @php
+                                                $x++;
+                                            @endphp
+                                            <tr>
+                                                <td><b><i>{{ $x }}</i></b></td>
+                                                <td>{{ $user->id }}</td>
+                                                <td>{{ $user->name }}</td>
+                                                <td>{{ $user->phone_number }}</td>
+                                                <td style="max-width: 300px">{{ $user->address }}</td>
+                                                <td>{{ $user->email }}</td>
+                                                <td><a href="{{ url('/removeuser' . $user->id) }}" class="btn btn-sm btn-danger">Remove</a></td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
