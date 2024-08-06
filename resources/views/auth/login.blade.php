@@ -1,4 +1,10 @@
+
 <x-guest-layout>
+    <div class="flex flex-col items-center justify-center">
+        <img src="assets/img/logo 3.png" style="pointer-events: none" class="mb-4" width="150px" alt="Logo">
+        <h1 class="text-white text-xl font-bold">ACCIDENT TRACKER</h1>
+        <h1 class="text-white text-md">Login</h1>
+    </div><br>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 

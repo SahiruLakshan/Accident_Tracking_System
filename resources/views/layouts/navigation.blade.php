@@ -3,9 +3,11 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
-                <!-- Logo -->
+                <div class="text-center">
+                    <img src="assets/img/logo 3.png" width="150px" alt="">
+                </div>
                 <div class="shrink-0 flex items-center">
-                    <h1 style="color: white;font-size:xx-large;text-align:center;font-weight:bolder">ACCIDENT TRACKER</h1>
+                    <h1 style="color: white;font-size:x-large;text-align:center;font-weight:bolder">ACCIDENT TRACKER</h1>
                 <h1 style="color: white;font-size:medium;text-align:center">SIGN IN</h1>
                 </div>
 

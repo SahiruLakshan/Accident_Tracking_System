@@ -9,7 +9,6 @@
 
     .year-dropdown {
         appearance: none;
-        /* Remove default dropdown arrow */
         width: 100%;
         padding: 10px;
         border: none;
@@ -19,22 +18,17 @@
         font-size: 16px;
         cursor: pointer;
         outline: none;
-        /* Remove outline on focus */
         text-align-last: center;
-        /* Center text */
     }
 
-    /* Custom arrow */
     .year-dropdown-container::after {
         content: '\25BC';
-        /* Unicode character for downward arrow */
         position: absolute;
         top: 50%;
         right: 10px;
         transform: translateY(-50%);
         pointer-events: none;
-        /* Allow clicks to go through the arrow */
-        color: rgb(255, 255, 255);
+        color: white;
         font-size: 12px;
     }
 
@@ -42,140 +36,120 @@
         background-color: black;
         color: white;
     }
+
+    .modal-content img {
+        max-width: 100px;
+        height: auto;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .modal-content img.enlarged {
+        transform: scale(4);
+    }
 </style>
+
 @section('content')
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header card-header-warning">
-                            <h4 class="card-title "><b>Accident Reports</b></h4>
-                            <p class="card-category"> Submitted By Users</p>
-                            <div class="year-dropdown-container">
-                                <select id="yearFilter" name="year" class="form-control year-dropdown">
-                                    @php
-                                        $currentYear = date('Y');
-                                        $startYear = 2000; // or the first year you have data for
-                                    @endphp
-                                    @for ($year = $currentYear; $year >= $startYear; $year--)
-                                        <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
-                                            {{ $year }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header card-header-warning">
+                        <h4 class="card-title"><b>Accident Reports</b></h4>
+                        <p class="card-category">Submitted By Users</p>
+                        <div class="year-dropdown-container">
+                            <select id="yearFilter" name="year" class="form-control year-dropdown">
+                                @php
+                                    $currentYear = date('Y');
+                                    $startYear = 2000;
+                                @endphp
+                                @for ($year = $currentYear; $year >= $startYear; $year--)
+                                    <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
+                                        {{ $year }}
+                                    </option>
+                                @endfor
+                            </select>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table">
-                                    <thead class="text-primary">
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="text-primary">
+                                    <tr>
+                                        <th style="color: white;">#</th>
+                                        <th style="color: white;">User ID</th>
+                                        <th style="color: white;">SE_No</th>
+                                        <th style="color: white;">Lat & Lon</th>
+                                        <th style="color: white;">Date</th>
+                                        <th style="color: white;">Time</th>
+                                        <th style="color: white;">Type</th>
+                                        <th style="color: white;">Severity</th>
+                                        <th style="color: white;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="accidentTableBody">
+                                    @php $x =0 @endphp
+                                    @foreach ($data as $accidents)
+                                        @php $x++ @endphp
                                         <tr>
-                                            <th style="color: white;">#</th>
-                                            <th style="color: white;">User ID</th>
-                                            <th style="color: white;">SE_No</th>
-                                            <th style="color: white;">Lat & Lon</th>
-                                            <th style="color: white;">Date</th>
-                                            <th style="color: white;">Time</th>
-                                            <th style="color: white;">Type</th>
-                                            <th style="color: white;">Severity</th>
-                                            <th style="color: white;"></th>
-                                            {{-- <th style="color: white;">Vehicle 1</th>
-                                            <th style="color: white;">Vehicle 2</th>
-                                            <th style="color: white;">Vehicle 3</th>
-                                            <th style="color: white;">Pedest</th>
-                                            <th style="color: white;">Object</th> --}}
-                                            {{-- <th style="color: white;">With_Con</th>
-                                            <th style="color: white;">Pas_Inj</th>
-                                            <th style="color: white;">Ped_Inj</th>
-                                            <th style="color: white;">des</th>
-                                            <th style="color: white;">drukness</th>
-                                            <th style="color: white;">dl</th>
-                                            <th style="color: white;">nic</th>
-                                            <th style="color: white;">Images</th>
-                                            <th style="color: white;">remarks</th> --}}
-
+                                            <td>{{ $x }}</td>
+                                            <td>{{ $accidents->user_id }}</td>
+                                            <td>{{ $accidents->se_no }}</td>
+                                            <td>
+                                                <a href="https://www.google.com/maps/search/?api=1&query={{ $accidents->lat }},{{ $accidents->lon }}"
+                                                    target="_blank" style="color: inherit; text-decoration: underline;">
+                                                    {{ $accidents->lat }},{{ $accidents->lon }}
+                                                </a>
+                                            </td>
+                                            <td>{{ $accidents->date }}</td>
+                                            <td>{{ $accidents->time }}</td>
+                                            <td>{{ $accidents->acd_type }}</td>
+                                            <td>{{ $accidents->severity }}</td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
+                                                    onclick="setDescription(
+                                                        '{{ $accidents->user_id }}', 
+                                                        '{{ $accidents->se_no }}', 
+                                                        '{{ $accidents->lat }}', 
+                                                        '{{ $accidents->lon }}', 
+                                                        '{{ $accidents->date }}', 
+                                                        '{{ $accidents->time }}', 
+                                                        '{{ $accidents->acd_type }}', 
+                                                        '{{ $accidents->severity }}', 
+                                                        '{{ $accidents->vehicle_1 }}', 
+                                                        '{{ $accidents->vehicle_2 }}', 
+                                                        '{{ $accidents->vehicle_3 }}', 
+                                                        '{{ $accidents->male_pedestrian }}', 
+                                                        '{{ $accidents->female_pedestrian }}',
+                                                        '{{ $accidents->object }}', 
+                                                        '{{ $accidents->weather }}', 
+                                                        '{{ $accidents->male_passengers }}', 
+                                                        '{{ $accidents->female_passengers }}', 
+                                                        '{{ $accidents->children_count }}', 
+                                                        '{{ $accidents->des }}', 
+                                                        '{{ $accidents->drunkness }}',
+                                                        '{{ $accidents->images }}', 
+                                                        '{{ $accidents->remarks }}'
+                                                    )">See More</button>
+                                                <a href="" class="btn btn-sm btn-danger">Remove</a>
+                                            </td>
                                         </tr>
-                                    </thead>
-
-                                    <tbody id="accidentTableBody">
-                                        @php $x =0 @endphp
-                                        @foreach ($data as $accidents)
-                                            @php $x++ @endphp
-                                            <tr>
-                                                <td>
-                                                    {{ $x }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->user_id }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->se_no }}
-                                                </td>
-                                                <td>
-                                                    <a href="https://www.google.com/maps/search/?api=1&query={{ $accidents->lat }},{{ $accidents->lon }}"
-                                                        target="_blank" style="color: inherit; text-decoration: underline;">
-                                                        {{ $accidents->lat }},{{ $accidents->lon }}
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->date }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->time }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->acd_type }}
-                                                </td>
-                                                <td>
-                                                    {{ $accidents->severity }}
-                                                </td>
-                                                <td>
-                                                    <button type="button" class="btn btn-sm btn-success"
-                                                        data-toggle="modal" data-target="#projectDetailsModal"
-                                                        onclick="setDescription(
-                                                            '{{ $accidents->user_id }}', 
-                                                            '{{ $accidents->se_no }}', 
-                                                            '{{ $accidents->lat }}', 
-                                                            '{{ $accidents->lon }}', 
-                                                            '{{ $accidents->date }}', 
-                                                            '{{ $accidents->time }}', 
-                                                            '{{ $accidents->acd_type }}', 
-                                                            '{{ $accidents->severity }}', 
-                                                            '{{ $accidents->vehicle_1 }}', 
-                                                            '{{ $accidents->vehicle_2 }}', 
-                                                            '{{ $accidents->vehicle_3 }}', 
-                                                            '{{ $accidents->male_pedestrian }}', 
-                                                            '{{ $accidents->female_pedestrian }}',
-                                                            '{{ $accidents->object }}', 
-                                                            '{{ $accidents->weather }}', 
-                                                            '{{ $accidents->male_passengers }}', 
-                                                            '{{ $accidents->female_passengers }}', 
-                                                            '{{ $accidents->children_count }}', 
-                                                            '{{ $accidents->des }}', 
-                                                            '{{ $accidents->drunkness }}', 
-                                                            '{{ $accidents->remarks }}'
-                                                        )">See
-                                                        More</button>
-                                                    <a href="" class="btn btn-sm btn-danger">Remove</a>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog"
-    aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
+<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog" aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 1140px">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #000000; color: white;">
@@ -185,8 +159,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table table-bordered">
-                    <!-- Update column headings as necessary -->
+                <table class="table table-bordered table-dark">
                     <tr>
                         <th>User ID</th>
                         <td id="modalUserId"></td>
@@ -255,13 +228,13 @@
                         <th>Drunkness</th>
                         <td id="modalDrunkness"></td>
                     </tr>
-                    {{-- <tr>
-                        <th>NIC</th>
-                        <td id="modalNic"></td>
-                    </tr> --}}
                     <tr>
                         <th>Remarks</th>
                         <td id="modalRemarks"></td>
+                    </tr>
+                    <tr>
+                        <th>Images</th>
+                        <td id="modalImages"></td>
                     </tr>
                 </table>
             </div>
@@ -275,30 +248,49 @@
 
 
 
+
 <script>
-    function setDescription(userId, seNo, lat, lon, date, time, acdType, severity, vehicle1, vehicle2, vehicle3,
-        maleped, femaleped, object, withCon, malepas, femalepas, child, des, drunkness, remarks) {
-        document.getElementById('modalUserId').innerText = userId;
-        document.getElementById('modalSeNo').innerText = seNo;
-        document.getElementById('modalLat').innerText = lat;
-        document.getElementById('modalLon').innerText = lon;
-        document.getElementById('modalDate').innerText = date;
-        document.getElementById('modalTime').innerText = time;
-        document.getElementById('modalType').innerText = acdType;
-        document.getElementById('modalSeverity').innerText = severity;
-        document.getElementById('modalVehicle1').innerText = vehicle1;
-        document.getElementById('modalVehicle2').innerText = vehicle2;
-        document.getElementById('modalVehicle3').innerText = vehicle3;
-        document.getElementById('modalMalePedInj').innerText = maleped;
-        document.getElementById('modalFemalePedInj').innerText = femaleped;
-        document.getElementById('modalMalePasInj').innerText = malepas;
-        document.getElementById('modalFemalePasInj').innerText = femalepas;
-        document.getElementById('modalChildInj').innerText = child;
-        document.getElementById('modalObject').innerText = object;
-        document.getElementById('modalWithCon').innerText = withCon;
-        document.getElementById('modalDes').innerText = des;
-        document.getElementById('modalDrunkness').innerText = drunkness;
-        document.getElementById('modalRemarks').innerText = remarks;
+    function setDescription(userId, seNo, lat, lon, date, time, type, severity, vehicle1, vehicle2, vehicle3, malePedInj, femalePedInj, object, weather, malePasInj, femalePasInj, childInj, des, drunkness, images, remarks) {
+        $('#modalUserId').text(userId);
+        $('#modalSeNo').text(seNo);
+        $('#modalLat').text(lat);
+        $('#modalLon').text(lon);
+        $('#modalDate').text(date);
+        $('#modalTime').text(time);
+        $('#modalType').text(type);
+        $('#modalSeverity').text(severity);
+        $('#modalVehicle1').text(vehicle1);
+        $('#modalVehicle2').text(vehicle2);
+        $('#modalVehicle3').text(vehicle3);
+        $('#modalMalePasInj').text(malePasInj);
+        $('#modalFemalePasInj').text(femalePasInj);
+        $('#modalMalePedInj').text(malePedInj);
+        $('#modalFemalePedInj').text(femalePedInj);
+        $('#modalChildInj').text(childInj);
+        $('#modalDes').text(des);
+        $('#modalDrunkness').text(drunkness);
+        $('#modalRemarks').text(remarks);
+
+        // Parse and display images
+        try {
+            const imageArray = JSON.parse(images);
+            let imageHtml = '';
+            imageArray.forEach(image => {
+                imageHtml += `<img src="assets/img/${image}" alt="Accident Image" onclick="enlargeImage(this)">`;
+            });
+            $('#modalImages').html(imageHtml);
+        } catch (error) {
+            console.error('Error parsing images:', error);
+            $('#modalImages').html('<p>No images available</p>');
+        }
+    }
+
+    function enlargeImage(imgElement) {
+        if (imgElement.classList.contains('enlarged')) {
+            imgElement.classList.remove('enlarged');
+        } else {
+            imgElement.classList.add('enlarged');
+        }
     }
 </script>
 
@@ -357,7 +349,7 @@
                                         '${accident.children_count}', 
                                         '${accident.des}', 
                                         '${accident.drunkness}', 
-                                        '${accident.remarks}'
+                                        '${accident.remarks}',
                                     )">See More</button>
                                 <a href="" class="btn btn-sm btn-danger">Remove</a>
                             </td>
