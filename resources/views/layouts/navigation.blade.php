@@ -5,9 +5,8 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
-                    </a>
+                    <h1 style="color: white;font-size:xx-large;text-align:center;font-weight:bolder">ACCIDENT TRACKER</h1>
+                <h1 style="color: white;font-size:medium;text-align:center">SIGN IN</h1>
                 </div>
 
                 <!-- Navigation Links -->

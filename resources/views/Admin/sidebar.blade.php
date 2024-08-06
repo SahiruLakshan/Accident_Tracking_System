@@ -1,8 +1,6 @@
 <div class="sidebar" data-color="purple" data-background-color="black" data-image="../assets/img/accident.jpg">
-    <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-            Accident Tracker
-        </a>
+    <div class="logo text-center">
+        <img src="assets/img/logo 3.png" style="pointer-events: none;" height="200px" alt="">
     </div>
     <div class="sidebar-wrapper">
         <ul class="nav">

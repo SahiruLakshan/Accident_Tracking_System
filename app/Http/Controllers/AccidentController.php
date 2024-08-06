@@ -25,7 +25,9 @@ class AccidentController extends Controller
 
     public function map()
     {
-        $locations = Data::all();
+        $currentYear = Carbon::now()->year;
+
+        $locations = Data::whereYear('date', $currentYear)->get();
         return view('Admin.map', ['locations' => $locations]);
     }
 
@@ -148,17 +150,16 @@ class AccidentController extends Controller
             ->select(
                 DB::raw('YEAR(date) as year'),
                 DB::raw('count(*) as accident_count'),
-                DB::raw('sum(pas_inj + ped_inj) as total_injuries')
+                DB::raw('sum(male_passengers + female_passengers) as passanger_injuries'),
+                DB::raw('sum(male_pedestrian + female_pedestrian) as pedestrian_injuries'),
+                DB::raw('sum(children_count) as children_injuries'),
             )
             ->whereYear('date', '>=', Carbon::now()->subYears(5)->year) // Get data starting from 5 years ago
-            ->whereYear('date', '<=', date('Y') - 1) // Get data up to the last year
+            ->whereYear('date', '<=', date('Y')) // Get data up to the last year
             ->groupBy(DB::raw('YEAR(date)'))
             ->orderBy('year', 'desc') // Order by year in descending order
             ->get();
 
         return view('Admin.info', compact('severityCounts', 'yearlyData'));
     }
-
-    
-
 }

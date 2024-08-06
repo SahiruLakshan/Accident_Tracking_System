@@ -42,7 +42,11 @@
                                     <th><b>#</b></th>
                                     <th><b>Year</b></th>
                                     <th><b>Accident Count</b></th>
+                                    <th><b>Passanger Injuries</b></th>
+                                    <th><b>Pedestrian Injuries</b></th>
+                                    <th><b>Children Injuries</b></th>
                                     <th><b>Injuries</b></th>
+                                    <th><b>Total Injuries</b></th>
                                 </thead>
                                 <tbody>
                                     @foreach ($yearlyData as $index => $data)
@@ -50,7 +54,10 @@
                                             <td>{{ $index + 1 }}</td>
                                             <td>{{ $data->year }}</td>
                                             <td>{{ $data->accident_count }}</td>
-                                            <td>{{ $data->total_injuries }}</td>
+                                            <td>{{ $data->passanger_injuries }}</td>
+                                            <td>{{ $data->pedestrian_injuries }}</td>
+                                            <td>{{ $data->children_injuries }}</td>
+                                            <td></td>
                                         </tr>
                                     @endforeach
                                 </tbody>

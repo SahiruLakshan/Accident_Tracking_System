@@ -145,15 +145,15 @@
                                                             '{{ $accidents->vehicle_1 }}', 
                                                             '{{ $accidents->vehicle_2 }}', 
                                                             '{{ $accidents->vehicle_3 }}', 
-                                                            '{{ $accidents->pedest }}', 
+                                                            '{{ $accidents->male_pedestrian }}', 
+                                                            '{{ $accidents->female_pedestrian }}',
                                                             '{{ $accidents->object }}', 
-                                                            '{{ $accidents->with_con }}', 
-                                                            '{{ $accidents->pas_inj }}', 
-                                                            '{{ $accidents->ped_inj }}', 
+                                                            '{{ $accidents->weather }}', 
+                                                            '{{ $accidents->male_passengers }}', 
+                                                            '{{ $accidents->female_passengers }}', 
+                                                            '{{ $accidents->children_count }}', 
                                                             '{{ $accidents->des }}', 
                                                             '{{ $accidents->drunkness }}', 
-                                                            '{{ $accidents->dl }}', 
-                                                            '{{ $accidents->nic }}', 
                                                             '{{ $accidents->remarks }}'
                                                         )">See
                                                         More</button>
@@ -186,6 +186,7 @@
             </div>
             <div class="modal-body">
                 <table class="table table-bordered">
+                    <!-- Update column headings as necessary -->
                     <tr>
                         <th>User ID</th>
                         <td id="modalUserId"></td>
@@ -227,24 +228,24 @@
                         <td id="modalVehicle3"></td>
                     </tr>
                     <tr>
-                        <th>Pedestrians</th>
-                        <td id="modalPedest"></td>
+                        <th>Male Passenger Injuries</th>
+                        <td id="modalMalePasInj"></td>
                     </tr>
                     <tr>
-                        <th>Object</th>
-                        <td id="modalObject"></td>
+                        <th>Female Passenger Injuries</th>
+                        <td id="modalFemalePasInj"></td>
                     </tr>
                     <tr>
-                        <th>Condition</th>
-                        <td id="modalWithCon"></td>
+                        <th>Male Pedestrian Injuries</th>
+                        <td id="modalMalePedInj"></td>
                     </tr>
                     <tr>
-                        <th>Passenger Injuries</th>
-                        <td id="modalPasInj"></td>
+                        <th>Female Pedestrian Injuries</th>
+                        <td id="modalFemalePedInj"></td>
                     </tr>
                     <tr>
-                        <th>Pedestrian Injuries</th>
-                        <td id="modalPedInj"></td>
+                        <th>Children Injuries</th>
+                        <td id="modalChildInj"></td>
                     </tr>
                     <tr>
                         <th>Description</th>
@@ -254,14 +255,10 @@
                         <th>Drunkness</th>
                         <td id="modalDrunkness"></td>
                     </tr>
-                    <tr>
-                        <th>Driving License</th>
-                        <td id="modalDl"></td>
-                    </tr>
-                    <tr>
+                    {{-- <tr>
                         <th>NIC</th>
                         <td id="modalNic"></td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <th>Remarks</th>
                         <td id="modalRemarks"></td>
@@ -277,9 +274,10 @@
 
 
 
+
 <script>
-    function setDescription(userId, seNo, lat, lon, date, time, acdType, severity, vehicle1, vehicle2, vehicle3, pedest,
-        object, withCon, pasInj, pedInj, des, drunkness, dl, nic, remarks) {
+    function setDescription(userId, seNo, lat, lon, date, time, acdType, severity, vehicle1, vehicle2, vehicle3,
+        maleped, femaleped, object, withCon, malepas, femalepas, child, des, drunkness, remarks) {
         document.getElementById('modalUserId').innerText = userId;
         document.getElementById('modalSeNo').innerText = seNo;
         document.getElementById('modalLat').innerText = lat;
@@ -291,15 +289,15 @@
         document.getElementById('modalVehicle1').innerText = vehicle1;
         document.getElementById('modalVehicle2').innerText = vehicle2;
         document.getElementById('modalVehicle3').innerText = vehicle3;
-        document.getElementById('modalPedest').innerText = pedest;
+        document.getElementById('modalMalePedInj').innerText = maleped;
+        document.getElementById('modalFemalePedInj').innerText = femaleped;
+        document.getElementById('modalMalePasInj').innerText = malepas;
+        document.getElementById('modalFemalePasInj').innerText = femalepas;
+        document.getElementById('modalChildInj').innerText = child;
         document.getElementById('modalObject').innerText = object;
         document.getElementById('modalWithCon').innerText = withCon;
-        document.getElementById('modalPasInj').innerText = pasInj;
-        document.getElementById('modalPedInj').innerText = pedInj;
         document.getElementById('modalDes').innerText = des;
         document.getElementById('modalDrunkness').innerText = drunkness;
-        document.getElementById('modalDl').innerText = dl;
-        document.getElementById('modalNic').innerText = nic;
         document.getElementById('modalRemarks').innerText = remarks;
     }
 </script>
@@ -322,26 +320,49 @@
                     // Iterate over the data returned from the server and append rows to the table body
                     $.each(response.data, function(index, accident) {
                         $('#accidentTableBody').append(`
-                            <tr>
-                                <td>${index + 1}</td>
-                                <td>${accident.user_id}</td>
-                                <td>${accident.se_no}</td>
-                                <td>
-                                    <a href="https://www.google.com/maps/search/?api=1&query=${accident.lat},${accident.lon}"
-                                       target="_blank" style="color: inherit; text-decoration: underline;">
-                                       ${accident.lat},${accident.lon}
-                                    </a>
-                                </td>
-                                <td>${accident.date}</td>
-                                <td>${accident.time}</td>
-                                <td>${accident.acd_type}</td>
-                                <td>${accident.severity}</td>
-                                <td>
-                                    <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal" data-description="{{ $accidents->des }}" onclick="setDescription('{{ $accidents->time }}','{{ $accidents->date }}')">See More</button>
-                                    <a href="" class="btn btn-sm btn-danger">Remove</a>
-                                </td>
-                            </tr>
-                        `);
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${accident.user_id}</td>
+                            <td>${accident.se_no}</td>
+                            <td>
+                                <a href="https://www.google.com/maps/search/?api=1&query=${accident.lat},${accident.lon}"
+                                   target="_blank" style="color: inherit; text-decoration: underline;">
+                                   ${accident.lat},${accident.lon}
+                                </a>
+                            </td>
+                            <td>${accident.date}</td>
+                            <td>${accident.time}</td>
+                            <td>${accident.acd_type}</td>
+                            <td>${accident.severity}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
+                                    onclick="setDescription(
+                                        '${accident.user_id}', 
+                                        '${accident.se_no}', 
+                                        '${accident.lat}', 
+                                        '${accident.lon}', 
+                                        '${accident.date}', 
+                                        '${accident.time}', 
+                                        '${accident.acd_type}', 
+                                        '${accident.severity}', 
+                                        '${accident.vehicle_1}', 
+                                        '${accident.vehicle_2}', 
+                                        '${accident.vehicle_3}', 
+                                        '${accident.male_pedestrian}', 
+                                        '${accident.female_pedestrian}',
+                                        '${accident.object}', 
+                                        '${accident.weather}', 
+                                        '${accident.male_passengers}', 
+                                        '${accident.female_passengers}', 
+                                        '${accident.children_count}', 
+                                        '${accident.des}', 
+                                        '${accident.drunkness}', 
+                                        '${accident.remarks}'
+                                    )">See More</button>
+                                <a href="" class="btn btn-sm btn-danger">Remove</a>
+                            </td>
+                        </tr>
+                    `);
                     });
                 },
                 error: function() {

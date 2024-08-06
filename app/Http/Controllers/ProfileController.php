@@ -14,10 +14,10 @@ class ProfileController extends Controller
 {
 
     public function user(){
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         return view('Admin.profile',compact('users'));
     }
-    
+
     /**
      * Display the user's profile form.
      */
