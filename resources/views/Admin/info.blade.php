@@ -45,7 +45,6 @@
                                     <th><b>Passanger Injuries</b></th>
                                     <th><b>Pedestrian Injuries</b></th>
                                     <th><b>Children Injuries</b></th>
-                                    <th><b>Injuries</b></th>
                                     <th><b>Total Injuries</b></th>
                                 </thead>
                                 <tbody>
@@ -57,7 +56,7 @@
                                             <td>{{ $data->passanger_injuries }}</td>
                                             <td>{{ $data->pedestrian_injuries }}</td>
                                             <td>{{ $data->children_injuries }}</td>
-                                            <td></td>
+                                            <td style="font-weight: 700">{{ $data->total_injuries }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>

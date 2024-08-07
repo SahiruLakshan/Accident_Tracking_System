@@ -50,65 +50,77 @@
 </style>
 
 @section('content')
-<div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header card-header-warning">
-                        <h4 class="card-title"><b>Accident Reports</b></h4>
-                        <p class="card-category">Submitted By Users</p>
-                        <div class="year-dropdown-container">
-                            <select id="yearFilter" name="year" class="form-control year-dropdown">
-                                @php
-                                    $currentYear = date('Y');
-                                    $startYear = 2000;
-                                @endphp
-                                @for ($year = $currentYear; $year >= $startYear; $year--)
-                                    <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
-                                        {{ $year }}
-                                    </option>
-                                @endfor
-                            </select>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header card-header-warning">
+                            <h4 class="card-title"><b>Accident Reports</b></h4>
+                            <p class="card-category">Submitted By Users</p>
+                            <div class="year-dropdown-container">
+                                <select id="yearFilter" name="year" class="form-control year-dropdown">
+                                    @php
+                                        $currentYear = date('Y');
+                                        $startYear = 2000;
+                                    @endphp
+                                    @for ($year = $currentYear; $year >= $startYear; $year--)
+                                        <option value="{{ $year }}" {{ $year == $selectedYear ? 'selected' : '' }}>
+                                            {{ $year }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead class="text-primary">
-                                    <tr>
-                                        <th style="color: white;">#</th>
-                                        <th style="color: white;">User ID</th>
-                                        <th style="color: white;">SE_No</th>
-                                        <th style="color: white;">Lat & Lon</th>
-                                        <th style="color: white;">Date</th>
-                                        <th style="color: white;">Time</th>
-                                        <th style="color: white;">Type</th>
-                                        <th style="color: white;">Severity</th>
-                                        <th style="color: white;"></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="accidentTableBody">
-                                    @php $x =0 @endphp
-                                    @foreach ($data as $accidents)
-                                        @php $x++ @endphp
+                        <div class="card-body">
+                            <form id="searchForm" class="navbar-form mr-5">
+                                @csrf
+                                <div class="input-group no-border sm:w-50">
+                                    <input type="text" id="searchaccidents" class="form-control flex-grow" name="search" placeholder="Search by Serial No, Date, or Time" />
+                                    <button type="submit" class="btn btn-default btn-round btn-just-icon">
+                                        <i class="material-icons">search</i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                </div>
+                            </form>
+                            
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="text-primary">
                                         <tr>
-                                            <td>{{ $x }}</td>
-                                            <td>{{ $accidents->user_id }}</td>
-                                            <td>{{ $accidents->se_no }}</td>
-                                            <td>
-                                                <a href="https://www.google.com/maps/search/?api=1&query={{ $accidents->lat }},{{ $accidents->lon }}"
-                                                    target="_blank" style="color: inherit; text-decoration: underline;">
-                                                    {{ $accidents->lat }},{{ $accidents->lon }}
-                                                </a>
-                                            </td>
-                                            <td>{{ $accidents->date }}</td>
-                                            <td>{{ $accidents->time }}</td>
-                                            <td>{{ $accidents->acd_type }}</td>
-                                            <td>{{ $accidents->severity }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
-                                                    onclick="setDescription(
+                                            <th style="color: white;">#</th>
+                                            <th style="color: white;">User ID</th>
+                                            <th style="color: white;">SE_No</th>
+                                            <th style="color: white;">Lat & Lon</th>
+                                            <th style="color: white;">Date</th>
+                                            <th style="color: white;">Time</th>
+                                            <th style="color: white;">Type</th>
+                                            <th style="color: white;">Severity</th>
+                                            <th style="color: white;"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="accidentTableBody">
+                                        @php $x =0 @endphp
+                                        @foreach ($data as $accidents)
+                                            @php $x++ @endphp
+                                            <tr>
+                                                <td>{{ $x }}</td>
+                                                <td>{{ $accidents->user_id }}</td>
+                                                <td>{{ $accidents->se_no }}</td>
+                                                <td>
+                                                    <a href="https://www.google.com/maps/search/?api=1&query={{ $accidents->lat }},{{ $accidents->lon }}"
+                                                        target="_blank" style="color: inherit; text-decoration: underline;">
+                                                        {{ $accidents->lat }},{{ $accidents->lon }}
+                                                    </a>
+                                                </td>
+                                                <td>{{ $accidents->date }}</td>
+                                                <td>{{ $accidents->time }}</td>
+                                                <td>{{ $accidents->acd_type }}</td>
+                                                <td>{{ $accidents->severity }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-success"
+                                                        data-toggle="modal" data-target="#projectDetailsModal"
+                                                        onclick="setDescription(
                                                         '{{ $accidents->user_id }}', 
                                                         '{{ $accidents->se_no }}', 
                                                         '{{ $accidents->lat }}', 
@@ -131,25 +143,31 @@
                                                         '{{ $accidents->drunkness }}',
                                                         '{{ $accidents->images }}', 
                                                         '{{ $accidents->remarks }}'
-                                                    )">See More</button>
-                                                <a href="" class="btn btn-sm btn-danger">Remove</a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                                                    )">See
+                                                        More</button>
+                                                    <a href="{{ url('/updateform' . $accidents->id) }}" class="btn btn-sm btn-primary">Update</a>
+                                                    @if (Auth::user()->type == '1')
+                                                        <a href="{{ url('/accidentremove' . $accidents->id) }}"
+                                                            class="btn btn-sm btn-danger">Remove</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog" aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
+<div class="modal fade" id="projectDetailsModal" tabindex="-1" role="dialog"
+    aria-labelledby="projectDetailsModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 1140px">
         <div class="modal-content">
             <div class="modal-header" style="background-color: #000000; color: white;">
@@ -246,11 +264,10 @@
 </div>
 
 
-
-
-
 <script>
-    function setDescription(userId, seNo, lat, lon, date, time, type, severity, vehicle1, vehicle2, vehicle3, malePedInj, femalePedInj, object, weather, malePasInj, femalePasInj, childInj, des, drunkness, images, remarks) {
+    function setDescription(userId, seNo, lat, lon, date, time, type, severity, vehicle1, vehicle2, vehicle3,
+        malePedInj, femalePedInj, object, weather, malePasInj, femalePasInj, childInj, des, drunkness, images, remarks
+        ) {
         $('#modalUserId').text(userId);
         $('#modalSeNo').text(seNo);
         $('#modalLat').text(lat);
@@ -276,7 +293,8 @@
             const imageArray = JSON.parse(images);
             let imageHtml = '';
             imageArray.forEach(image => {
-                imageHtml += `<img src="assets/img/${image}" alt="Accident Image" onclick="enlargeImage(this)">`;
+                imageHtml +=
+                `<img src="assets/img/${image}" alt="Accident Image" onclick="enlargeImage(this)">`;
             });
             $('#modalImages').html(imageHtml);
         } catch (error) {
@@ -326,7 +344,7 @@
                             <td>${accident.time}</td>
                             <td>${accident.acd_type}</td>
                             <td>${accident.severity}</td>
-                            <td>
+                            <td> 
                                 <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
                                     onclick="setDescription(
                                         '${accident.user_id}', 
@@ -351,7 +369,8 @@
                                         '${accident.drunkness}', 
                                         '${accident.remarks}',
                                     )">See More</button>
-                                <a href="" class="btn btn-sm btn-danger">Remove</a>
+                                <a href="" class="btn btn-sm btn-danger">Update</a>
+                                <a href="" class="btn btn-sm btn-danger">Remove</a> 
                             </td>
                         </tr>
                     `);
@@ -359,6 +378,85 @@
                 },
                 error: function() {
                     console.error('Error fetching data for selected year');
+                }
+            });
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#searchaccidents').on('keyup', function() {
+            var seno = $(this).val();
+            $.ajax({
+                url: '{{ route('searchReports') }}',
+                type: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    search: seno
+                },
+                success: function(response) {
+                    $('#accidentTableBody').empty();
+                    if (response.data.length > 0) {
+                        var accidents = response.data;
+                        var x = 1;
+                        accidents.forEach(function(accidents) {
+                            $('#accidentTableBody').append(`
+                                <tr>
+                                    <td>${x}</td>
+                                    <td>${accidents.user_id}</td>
+                                    <td>${accidents.se_no}</td>
+                                    <td>
+                                        <a href="https://www.google.com/maps/search/?api=1&query=${accidents.lat},${accidents.lon}"
+                                            target="_blank" style="color: inherit; text-decoration: underline;">
+                                            ${accidents.lat},${accidents.lon}
+                                        </a>
+                                    </td>
+                                    <td>${accidents.date}</td>
+                                    <td>${accidents.time}</td>
+                                    <td>${accidents.acd_type}</td>
+                                    <td>${accidents.severity}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
+                                            onclick="setDescription(
+                                                '${accidents.user_id}', 
+                                                '${accidents.se_no}', 
+                                                '${accidents.lat}', 
+                                                '${accidents.lon}', 
+                                                '${accidents.date}', 
+                                                '${accidents.time}', 
+                                                '${accidents.acd_type}', 
+                                                '${accidents.severity}', 
+                                                '${accidents.vehicle_1}', 
+                                                '${accidents.vehicle_2}', 
+                                                '${accidents.vehicle_3}', 
+                                                '${accidents.male_pedestrian}', 
+                                                '${accidents.female_pedestrian}',
+                                                '${accidents.object}', 
+                                                '${accidents.weather}', 
+                                                '${accidents.male_passengers}', 
+                                                '${accidents.female_passengers}', 
+                                                '${accidents.children_count}', 
+                                                '${accidents.des}', 
+                                                '${accidents.drunkness}',
+                                                '${accidents.images}', 
+                                                '${accidents.remarks}'
+                                            )">See More</button>
+                                        <a href="" class="btn btn-sm btn-primary">Update</a>
+                                        <a href="/accidentremove${accidents.id}" class="btn btn-sm btn-danger">Remove</a>
+                                    </td>
+                                </tr>
+                            `);
+                            x++;
+                        });
+                    } else {
+                        $('#accidentTableBody').append(
+                            '<tr><td colspan="9">No accident found</td></tr>');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(error);
                 }
             });
         });

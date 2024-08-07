@@ -20,6 +20,7 @@ class AccidentController extends Controller
             return response()->json(['data' => $data]);
         }
 
+
         return view('Admin.accidents', compact('data', 'selectedYear'));
     }
 
@@ -153,6 +154,7 @@ class AccidentController extends Controller
                 DB::raw('sum(male_passengers + female_passengers) as passanger_injuries'),
                 DB::raw('sum(male_pedestrian + female_pedestrian) as pedestrian_injuries'),
                 DB::raw('sum(children_count) as children_injuries'),
+                DB::raw('sum(male_passengers + female_passengers + male_pedestrian + female_pedestrian + children_count) as total_injuries'),
             )
             ->whereYear('date', '>=', Carbon::now()->subYears(5)->year) // Get data starting from 5 years ago
             ->whereYear('date', '<=', date('Y')) // Get data up to the last year
@@ -161,5 +163,35 @@ class AccidentController extends Controller
             ->get();
 
         return view('Admin.info', compact('severityCounts', 'yearlyData'));
+    }
+
+    public function accidentremove($id)
+    {
+        $accident = Data::find($id);
+        $accident->delete();
+        return redirect()->back()->with('success', 'Accident Deleted.');
+    }
+
+    public function searchReports(Request $request)
+    {
+        $searchTerm = $request->search;
+
+        $data = Data::where('se_no', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('date', 'LIKE', '%' . $searchTerm . '%')
+            ->orWhere('time', 'LIKE', '%' . $searchTerm . '%')
+            ->get();
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function form($id){
+        $data = Data::find($id);
+        return view('Admin.update',compact('data'));
+    }
+
+    public function update(Request $request,$id){
+        $data = Data::find($id);
+        $data->update($request->all());
+        return redirect()->back()->with('success', 'Accident Updated.');
     }
 }

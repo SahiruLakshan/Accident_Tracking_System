@@ -10,16 +10,16 @@
                     <p>Dashboard</p>
                 </a>
             </li>
-            <li class="nav-item" id="info-link">
-                <a class="nav-link" href="/info">
-                    <i class="material-icons">local_pharmacy</i>
-                    <p>Injured / Death Details</p>
-                </a>
-            </li>
             <li class="nav-item" id="accidents-link">
                 <a class="nav-link" href="/accidents">
                     <i class="material-icons">report</i>
                     <p>Accidents Reports</p>
+                </a>
+            </li>
+            <li class="nav-item" id="info-link">
+                <a class="nav-link" href="/info">
+                    <i class="material-icons">local_pharmacy</i>
+                    <p>Injured / Death Details</p>
                 </a>
             </li>
             @if (Auth::user()->type == '1')

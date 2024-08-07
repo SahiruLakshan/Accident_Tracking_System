@@ -70,4 +70,13 @@ class ProfileController extends Controller
         $user->delete();
         return redirect()->back()->with('success', 'User Deleted.');
     }
+
+    public function searchByUserId(Request $request)
+    {
+        $user = $request->search;
+        $users = User::where('id', 'LIKE', '%' . $user . '%')
+                 ->orWhere('name', 'LIKE', '%' . $user . '%')->get();
+
+        return response()->json(['users' => $users]);
+    }
 }
