@@ -11,6 +11,7 @@ class Data extends Model
 
     protected $table = 'data';
     protected $fillable = [
+        'user_id',
         'se_no',
         'lat',
         'lon',
