@@ -42,7 +42,7 @@
                                                 <td>{{ $user->phone_number }}</td>
                                                 <td style="max-width: 300px">{{ $user->address }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td><a href="{{ url('/removeuser/' . $user->id) }}" class="btn btn-sm btn-danger">Remove</a></td>
+                                                <td><a href="{{ url('/removeuser' . $user->id) }}" class="btn btn-sm btn-danger">Remove</a></td>
                                             </tr>
                                         @endforeach
                                     </tbody>
