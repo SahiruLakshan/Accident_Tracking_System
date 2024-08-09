@@ -184,14 +184,20 @@ class AccidentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function form($id){
+    public function form($id)
+    {
         $data = Data::find($id);
-        return view('Admin.update',compact('data'));
+        return view('Admin.update', compact('data'));
     }
 
-    public function update(Request $request,$id){
-        $data = Data::find($id);
+    public function update(Request $request, $id)
+    {
+        $data = Data::findOrFail($id);
+
+        // Update the record with the new data
         $data->update($request->all());
-        return redirect()->back()->with('success', 'Accident Updated.');
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Accident Updated Successfully.');
     }
 }

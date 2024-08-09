@@ -1,5 +1,5 @@
 @extends('Admin.dashboard')
-
+<link rel="icon" type="image/png" href="../assets/img/favicon 2.png">
 <style>
     .year-dropdown-container {
         position: relative;
