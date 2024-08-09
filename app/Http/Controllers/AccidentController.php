@@ -6,10 +6,73 @@ use App\Models\Data;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class AccidentController extends Controller
 {
+
+    public function store(Request $request)
+    {
+        // Log the incoming request data
+        Log::info('Incoming request data:', $request->all());
+
+        try {
+            // Handle file uploads (images)
+            $imagePaths = [];
+            foreach ($request->file('accident_images') as $image) {
+                $filename = $image->getClientOriginalName();
+                // Store the image in the desired directory
+                $path = $image->storeAs('public/AC_images', $filename);
+                // Store only the filename in the array
+                $imagePaths[] = $filename;
+            }
+
+            Log::info('Data get');
+            // Create new data entry
+            $data = new Data();
+            $data->user_id = $request->input('user_id');
+            $data->se_no = $request->input('se_no');
+            $data->lat = $request->input('latitude');
+            $data->lon = $request->input('longitude');
+            $data->date = $request->input('date');
+            $data->time = $request->input('time');
+            $data->acd_type = $request->input('accident_type');
+            $data->severity = $request->input('severity');
+            $data->weather = $request->input('weather');
+            $data->vehicle_1 = $request->input('vehicle_type_1');
+            $data->vehicle_2 = $request->input('vehicle_type_2');
+            $data->vehicle_3 = $request->input('vehicle_type_3');
+            $data->pedest = $request->input('object_type');
+            $data->object = $request->input('object_type');
+            $data->with_con = $request->input('property_damage');
+            $data->pas_inj = $request->input('passenger_injured') === 'true'; // Convert to boolean
+            $data->male_passengers = $request->input('male_passengers');
+            $data->female_passengers = $request->input('female_passengers');
+            $data->ped_inj = $request->input('pedestrian_injured') === 'true'; // Convert to boolean
+            $data->male_pedestrian = $request->input('male_pedestrian');
+            $data->female_pedestrian = $request->input('female_pedestrian');
+            $data->children_injured = $request->input('children_injured') === 'true'; // Convert to boolean
+            $data->children_count = $request->input('children_count');
+            $data->des = $request->input('description');
+            $data->drunkness = $request->input('driver_drank') === 'true'; // Convert to boolean
+            $data->remarks = $request->input('remarks');
+            $data->images = json_encode($imagePaths); // Store image URLs as JSON array
+            $data->save();
+
+            // Log successful save
+            Log::info('Data saved successfully:', $data->toArray());
+
+            return response()->json(['message' => 'Data saved successfully'], 200);
+        } catch (\Exception $e) {
+            // Log the exception message
+            Log::error('Failed to save data:', ['error' => $e->getMessage()]);
+            return response()->json(['error' => 'Failed to save data: ' . $e->getMessage()], 500);
+        }
+    }
+
+
     public function getdata(Request $request)
     {
         $selectedYear = $request->input('year', date('Y'));
@@ -184,12 +247,14 @@ class AccidentController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function form($id){
+    public function form($id)
+    {
         $data = Data::find($id);
-        return view('Admin.update',compact('data'));
+        return view('Admin.update', compact('data'));
     }
 
-    public function update(Request $request,$id){
+    public function update(Request $request, $id)
+    {
         $data = Data::find($id);
         $data->update($request->all());
         return redirect()->back()->with('success', 'Accident Updated.');
