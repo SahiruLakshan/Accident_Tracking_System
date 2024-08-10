@@ -76,14 +76,15 @@
                             <form id="searchForm" class="navbar-form mr-5">
                                 @csrf
                                 <div class="input-group no-border sm:w-50">
-                                    <input type="text" id="searchaccidents" class="form-control flex-grow" name="search" placeholder="Search by Serial No, Date, or Time" />
+                                    <input type="text" id="searchaccidents" class="form-control flex-grow" name="search"
+                                        placeholder="Search by Serial No, Date, or Time" />
                                     <button type="submit" class="btn btn-default btn-round btn-just-icon">
                                         <i class="material-icons">search</i>
                                         <div class="ripple-container"></div>
                                     </button>
                                 </div>
                             </form>
-                            
+
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead class="text-primary">
@@ -145,8 +146,9 @@
                                                         '{{ $accidents->remarks }}'
                                                     )">See
                                                         More</button>
-                                                    <a href="{{ url('/updateform' . $accidents->id) }}" class="btn btn-sm btn-primary">Update</a>
                                                     @if (Auth::user()->type == '1')
+                                                        <a href="{{ url('/updateform' . $accidents->id) }}"
+                                                            class="btn btn-sm btn-primary">Update</a>
                                                         <a href="{{ url('/accidentremove' . $accidents->id) }}"
                                                             class="btn btn-sm btn-danger">Remove</a>
                                                     @endif
@@ -267,7 +269,8 @@
 <script>
     function setDescription(userId, seNo, lat, lon, date, time, type, severity, vehicle1, vehicle2, vehicle3,
         malePedInj, femalePedInj, object, weather, malePasInj, femalePasInj, childInj, des, drunkness, images, remarks
-        ) {
+    ) {
+        console.log(images);
         $('#modalUserId').text(userId);
         $('#modalSeNo').text(seNo);
         $('#modalLat').text(lat);
@@ -294,7 +297,7 @@
             let imageHtml = '';
             imageArray.forEach(image => {
                 imageHtml +=
-                `<img src="assets/img/${image}" alt="Accident Image" onclick="enlargeImage(this)">`;
+                    `<img src="/storage/${image}" alt="Accident Image" onclick="enlargeImage(this)">`;
             });
             $('#modalImages').html(imageHtml);
         } catch (error) {
@@ -366,11 +369,15 @@
                                         '${accident.female_passengers}', 
                                         '${accident.children_count}', 
                                         '${accident.des}', 
-                                        '${accident.drunkness}', 
-                                        '${accident.remarks}',
+                                        '${accident.drunkness}',
+                                        '${accident.images}',
+                                        '${accident.remarks}'
                                     )">See More</button>
-                                <a href="" class="btn btn-sm btn-danger">Update</a>
-                                <a href="" class="btn btn-sm btn-danger">Remove</a> 
+                                    
+                                @if (Auth::user()->type == '1')
+                                        <a href="/updateform${accident.id}" class="btn btn-sm btn-primary">Update</a>
+                                        <a href="/accidentremove${accident.id}" class="btn btn-sm btn-danger">Remove</a>
+                                @endif
                             </td>
                         </tr>
                     `);
@@ -383,6 +390,7 @@
         });
     });
 </script>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -401,50 +409,56 @@
                     if (response.data.length > 0) {
                         var accidents = response.data;
                         var x = 1;
-                        accidents.forEach(function(accidents) {
+                        accidents.forEach(function(accident) { // Use 'accident' singular
+                            var buttons = '';
+                            @if (Auth::user()->type == '1')
+                                buttons = `
+                                    <a href="/updateform${accident.id}" class="btn btn-sm btn-primary">Update</a>
+                                    <a href="/accidentremove${accident.id}" class="btn btn-sm btn-danger">Remove</a>`;
+                            @endif
+
                             $('#accidentTableBody').append(`
                                 <tr>
                                     <td>${x}</td>
-                                    <td>${accidents.user_id}</td>
-                                    <td>${accidents.se_no}</td>
+                                    <td>${accident.user_id}</td>
+                                    <td>${accident.se_no}</td>
                                     <td>
-                                        <a href="https://www.google.com/maps/search/?api=1&query=${accidents.lat},${accidents.lon}"
+                                        <a href="https://www.google.com/maps/search/?api=1&query=${accident.lat},${accident.lon}"
                                             target="_blank" style="color: inherit; text-decoration: underline;">
-                                            ${accidents.lat},${accidents.lon}
+                                            ${accident.lat},${accident.lon}
                                         </a>
                                     </td>
-                                    <td>${accidents.date}</td>
-                                    <td>${accidents.time}</td>
-                                    <td>${accidents.acd_type}</td>
-                                    <td>${accidents.severity}</td>
+                                    <td>${accident.date}</td>
+                                    <td>${accident.time}</td>
+                                    <td>${accident.acd_type}</td>
+                                    <td>${accident.severity}</td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#projectDetailsModal"
                                             onclick="setDescription(
-                                                '${accidents.user_id}', 
-                                                '${accidents.se_no}', 
-                                                '${accidents.lat}', 
-                                                '${accidents.lon}', 
-                                                '${accidents.date}', 
-                                                '${accidents.time}', 
-                                                '${accidents.acd_type}', 
-                                                '${accidents.severity}', 
-                                                '${accidents.vehicle_1}', 
-                                                '${accidents.vehicle_2}', 
-                                                '${accidents.vehicle_3}', 
-                                                '${accidents.male_pedestrian}', 
-                                                '${accidents.female_pedestrian}',
-                                                '${accidents.object}', 
-                                                '${accidents.weather}', 
-                                                '${accidents.male_passengers}', 
-                                                '${accidents.female_passengers}', 
-                                                '${accidents.children_count}', 
-                                                '${accidents.des}', 
-                                                '${accidents.drunkness}',
-                                                '${accidents.images}', 
-                                                '${accidents.remarks}'
+                                                '${accident.user_id}', 
+                                                '${accident.se_no}', 
+                                                '${accident.lat}', 
+                                                '${accident.lon}', 
+                                                '${accident.date}', 
+                                                '${accident.time}', 
+                                                '${accident.acd_type}', 
+                                                '${accident.severity}', 
+                                                '${accident.vehicle_1}', 
+                                                '${accident.vehicle_2}', 
+                                                '${accident.vehicle_3}', 
+                                                '${accident.male_pedestrian}', 
+                                                '${accident.female_pedestrian}',
+                                                '${accident.object}', 
+                                                '${accident.weather}', 
+                                                '${accident.male_passengers}', 
+                                                '${accident.female_passengers}', 
+                                                '${accident.children_count}', 
+                                                '${accident.des}', 
+                                                '${accident.drunkness}',
+                                                '${accident.drunkness}',
+                                                '${accident.remarks}'
                                             )">See More</button>
-                                        <a href="" class="btn btn-sm btn-primary">Update</a>
-                                        <a href="/accidentremove${accidents.id}" class="btn btn-sm btn-danger">Remove</a>
+                                        ${buttons}
                                     </td>
                                 </tr>
                             `);
