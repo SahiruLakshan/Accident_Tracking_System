@@ -51,7 +51,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="severity" style="color: white;">Severity:</label>
-                                <select id="acd_type" name="severity" class="form-control">
+                                <select id="severity" name="severity" class="form-control">
                                     <option value="Patal" style="color: black" {{ $data->severity == 'Patal' ? 'selected' : '' }}>Patal</option>
                                     <option value="Major" style="color: black" {{ $data->severity == 'Major' ? 'selected' : '' }}>Major</option>
                                     <option value="Medium" style="color: black" {{ $data->severity == 'Medium' ? 'selected' : '' }}>Medium</option>
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    {{-- <div class="row mt-3">
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label for="acd_type" style="color: white;">Weather</label>
@@ -137,7 +137,7 @@
                                 <input type="number" id="male_pedestrian" name="male_pedestrian" class="form-control" value="{{ $data->male_pedestrian }}">
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row mt-3">
                         <div class="col-md-3">
                             <div class="form-group">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Data;
 use App\Models\User;
+use App\Events\NewAccidentReport;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -97,6 +98,7 @@ class AccidentController extends Controller
 
     public function home()
     {
+
         $currentYear = Carbon::now()->year;
         $lastYear = $currentYear - 1;
         $currentDate = Carbon::now();
@@ -257,10 +259,37 @@ class AccidentController extends Controller
     {
         $data = Data::findOrFail($id);
 
-        // Update the record with the new data
-        $data->update($request->all());
+        $data->se_no = $request->input('se_no');
+        $data->date = $request->input('date');
+        $data->time = $request->input('time');
+        $data->acd_type = $request->input('acd_type');
+        $data->severity = $request->input('severity');
+        $data->vehicle_1 = $request->input('vehicle_1');
+        $data->vehicle_2 = $request->input('vehicle_2');
+        $data->vehicle_3 = $request->input('vehicle_3');
+        $data->object = $request->input('object');
+        $data->with_con = $request->input('with_con');
+        $data->male_passengers = $request->input('male_passengers');
+        $data->female_passengers = $request->input('female_passengers');
+        $data->male_pedestrian = $request->input('male_pedestrian');
+        $data->children_count = $request->input('children_count');
+        $data->des = $request->input('des');
+        $data->drunkness = $request->input('drunkness');
+        $data->remarks = $request->input('remarks');
+        $data->update();
 
-        // Redirect back with a success message
         return redirect()->back()->with('success', 'Accident Updated Successfully.');
     }
+
+    // public function notification(Request $request)
+    // {
+    //     // Validate and create the new accident report
+    //     $accident = Data::create($request->all());
+
+    //     // Fire the event
+    //     event(new NewAccidentReport($accident));
+
+    //     // Return response
+    //     return response()->json($accident);
+    // }
 }

@@ -45,7 +45,7 @@
         <div class="main-panel">
 
             @include('Admin.navbar')
-            @yield('content')
+                @yield('content')
             @include('Admin.footer')
 
             <script>

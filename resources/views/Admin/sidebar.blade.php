@@ -13,7 +13,7 @@
             <li class="nav-item" id="accidents-link">
                 <a class="nav-link" href="/accidents">
                     <i class="material-icons">report</i>
-                    <p>Accidents Reports</p>
+                    <p>Accident Reports</p>
                 </a>
             </li>
             <li class="nav-item" id="info-link">
